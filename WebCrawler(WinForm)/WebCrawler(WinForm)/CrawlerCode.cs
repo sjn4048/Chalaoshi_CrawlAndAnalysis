@@ -14,38 +14,18 @@ using Abot.Crawler;
 using Abot.Poco;
 using CsQuery.HtmlParser;
 using log4net.Config;
-using AngleSharp;
-using HtmlParserSharp;
-using HtmlAgilityPack;
 
-
-namespace WebCrawler_Console_
+/*
+namespace WebCrawler_WinForm_
 {
-    class Program
-    {
-        static void Main(string[] args)
-        {
-            //XmlConfigurator.Configure();//本行控制是否采用log4net提供的log功能
-            WebCrawlerProcess crawler = new WebCrawlerProcess();
-            crawler.StartWebCrawler();
-        }
-    }
-
     static class Chalaoshi
     {
         public static int MaximumTeacherPage = 3743;
         public static Regex TeacherDataRegex = new Regex("^https://chalaoshi.cn/teacher/\\d+/");
-        public struct CourseAndGPA
-        {
-            public string CourseName;
-            public string OverallGPA; //后期要用Regex拆出来两个double
-        }
     }
 
     class WebCrawlerProcess
     {
-        //public static readonly Uri FeedUri = new Uri(@"https://chalaoshi.cn"); 暂时不需要
-
         static int CrawledPageCount = 0;//已爬的页面数
 
         static int FailedPageCount = 0;//用于debug
@@ -105,15 +85,12 @@ namespace WebCrawler_Console_
                 Thread.Sleep(1000);//给服务器休息一下
             }
 
-            if (LeftLinkList.Count > 0)
+            for (int i = 0; i < PageLinkList.Count; i++)
             {
-                for (int i = 0; i < LeftLinkList.Count; i++)
-                {
-                    sw.WriteLine("#{0}#未写入", LeftLinkList[i]);
-                }
-                sw.Close();
-                FailLog.Close();
+                sw.WriteLine("#{0}#未写入", LeftLinkList[i]);
             }
+            sw.Close();
+            FailLog.Close();
 
             var fileName = $"CLStext_{DateTime.Now.Year.ToString()}_{DateTime.Now.Month.ToString()}_{DateTime.Now.Day}_{DateTime.Now.Hour}_{DateTime.Now.Minute}_{DateTime.Now.Second}.csv";
             FileStream file = new FileStream(fileName, FileMode.Append, FileAccess.Write);//在此处定义，保证读写锁的最大性能
@@ -127,14 +104,7 @@ namespace WebCrawler_Console_
             file.Close();
 
             stopwatch.Stop();
-            try
-            {
-                Console.WriteLine("Finished Completely.\nTime Consume:{0}\nPage Number:{1}\nTime Per Page:{2} milliseconds.\nPress any key to continue.", stopwatch.Elapsed, TotalInfo.Count, stopwatch.ElapsedMilliseconds / TotalInfo.Count);
-            }
-            catch
-            {
-                Console.WriteLine("当前已爬网页数量为0");
-            }
+            Console.WriteLine("Finished Completely.\nTime Consume:{0}\nPage Number:{1}\nTime Per Page:{2} milliseconds.\nPress any key to continue.", stopwatch.Elapsed, TotalInfo.Count, stopwatch.ElapsedMilliseconds / TotalInfo.Count);
             Console.WriteLine(FailedPageCount.ToString());
             Console.ReadLine();
         }
@@ -194,15 +164,12 @@ namespace WebCrawler_Console_
             int i = 2;
             var CourseList = new List<Chalaoshi.CourseAndGPA>();
 
-            List<string> CombineList = new List<string>();// 即将被淘汰
             while (true)
             {
                 try
                 {
                     var courseName = crawledPage.CsQueryDocument.Select($"body > div.main > div:nth-child(2) > div > div:nth-child({i}) > div.left > p").FirstElement().FirstChild.ToString();
                     var overallGPA = crawledPage.CsQueryDocument.Select($"body > div.main > div:nth-child(2) > div > div:nth-child({i}) > div.right > p").FirstElement().FirstChild.ToString();
-                    var NameGPACombination = courseName + ":" + overallGPA; // 即将被淘汰
-                    CombineList.Add(NameGPACombination);// 即将被淘汰
                     Chalaoshi.CourseAndGPA newCourse;
                     newCourse.CourseName = courseName;
                     newCourse.OverallGPA = overallGPA;
@@ -215,8 +182,8 @@ namespace WebCrawler_Console_
                 i++;
             }
 
-            /*
-             * 这块是读取评论。不知道为什么Xpath找不到。我一定能做出来的。
+
+            *这块是读取评论。不知道为什么Xpath找不到。我一定能做出来的。
 
             i = 1;
             while (true)
@@ -236,15 +203,10 @@ namespace WebCrawler_Console_
                 }
             }
 
-            */
+
 
             #endregion
             var Info = $"{Name},{ID},{Uri},{School},{Faculty},{Score},{CallNameRate},{VoteNumber},{CommentNumber}";
-
-            for (int Loopi = 0; Loopi < CombineList.Count; Loopi++) // 即将被淘汰
-            {
-                Info += $",{CombineList[Loopi]}";
-            }
 
             //var WriteContent = Name + "\t\t\t" + Score + "\t" + Uri;
 
@@ -309,3 +271,4 @@ namespace WebCrawler_Console_
         }
     }
 }
+*/

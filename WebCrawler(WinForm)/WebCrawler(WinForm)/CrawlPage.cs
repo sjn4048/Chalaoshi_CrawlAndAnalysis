@@ -1,10 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
+using System.Data;
+using System.Drawing;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
+using System.Windows.Forms;
 using System.IO;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 using System.Threading;
 using System.Diagnostics;
 using System.Configuration;
@@ -14,20 +18,32 @@ using Abot.Crawler;
 using Abot.Poco;
 using CsQuery.HtmlParser;
 using log4net.Config;
-using AngleSharp;
-using HtmlParserSharp;
-using HtmlAgilityPack;
 
 
-namespace WebCrawler_Console_
+
+namespace WebCrawler_WinForm_
 {
-    class Program
+    public partial class CrawlPage : Form
     {
-        static void Main(string[] args)
+        public CrawlPage()
         {
-            //XmlConfigurator.Configure();//本行控制是否采用log4net提供的log功能
+            InitializeComponent();
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
             WebCrawlerProcess crawler = new WebCrawlerProcess();
             crawler.StartWebCrawler();
+        }
+
+        private void CrawlPage_Load(object sender, EventArgs e)
+        {
+            FinishButton.Hide();
+        }
+
+        private void FinishButton_Click(object sender, EventArgs e)
+        {
+            
         }
     }
 
@@ -35,17 +51,10 @@ namespace WebCrawler_Console_
     {
         public static int MaximumTeacherPage = 3743;
         public static Regex TeacherDataRegex = new Regex("^https://chalaoshi.cn/teacher/\\d+/");
-        public struct CourseAndGPA
-        {
-            public string CourseName;
-            public string OverallGPA; //后期要用Regex拆出来两个double
-        }
     }
 
     class WebCrawlerProcess
     {
-        //public static readonly Uri FeedUri = new Uri(@"https://chalaoshi.cn"); 暂时不需要
-
         static int CrawledPageCount = 0;//已爬的页面数
 
         static int FailedPageCount = 0;//用于debug
@@ -105,15 +114,12 @@ namespace WebCrawler_Console_
                 Thread.Sleep(1000);//给服务器休息一下
             }
 
-            if (LeftLinkList.Count > 0)
+            for (int i = 0; i < PageLinkList.Count; i++)
             {
-                for (int i = 0; i < LeftLinkList.Count; i++)
-                {
-                    sw.WriteLine("#{0}#未写入", LeftLinkList[i]);
-                }
-                sw.Close();
-                FailLog.Close();
+                sw.WriteLine("#{0}#未写入", LeftLinkList[i]);
             }
+            sw.Close();
+            FailLog.Close();
 
             var fileName = $"CLStext_{DateTime.Now.Year.ToString()}_{DateTime.Now.Month.ToString()}_{DateTime.Now.Day}_{DateTime.Now.Hour}_{DateTime.Now.Minute}_{DateTime.Now.Second}.csv";
             FileStream file = new FileStream(fileName, FileMode.Append, FileAccess.Write);//在此处定义，保证读写锁的最大性能
@@ -127,14 +133,7 @@ namespace WebCrawler_Console_
             file.Close();
 
             stopwatch.Stop();
-            try
-            {
-                Console.WriteLine("Finished Completely.\nTime Consume:{0}\nPage Number:{1}\nTime Per Page:{2} milliseconds.\nPress any key to continue.", stopwatch.Elapsed, TotalInfo.Count, stopwatch.ElapsedMilliseconds / TotalInfo.Count);
-            }
-            catch
-            {
-                Console.WriteLine("当前已爬网页数量为0");
-            }
+            Console.WriteLine("Finished Completely.\nTime Consume:{0}\nPage Number:{1}\nTime Per Page:{2} milliseconds.\nPress any key to continue.", stopwatch.Elapsed, TotalInfo.Count, stopwatch.ElapsedMilliseconds / TotalInfo.Count);
             Console.WriteLine(FailedPageCount.ToString());
             Console.ReadLine();
         }
@@ -171,80 +170,12 @@ namespace WebCrawler_Console_
                 return;
             }
 
-            var Agility = crawledPage.HtmlDocument.DocumentNode;
-
             var Uri = crawledPage.Uri.AbsoluteUri;
             var ID = Regex.Replace(Uri, @"[^0-9]+", "");
-            var Name = Agility.SelectSingleNode("/html/body/div[3]/div[1]/div[1]/h3").InnerHtml.ToString();
-            var Score = Agility.SelectSingleNode("/html/body/div[3]/div[1]/div[2]/h2").InnerHtml.ToString();
-            Score = (Score == "N/A") ? "0.00" : Score;
-            var VoteNumber = new Regex(@"[0-9]*")
-                             .Match(Agility.SelectSingleNode("/html/body/div[3]/div[1]/div[2]/p").InnerHtml.ToString())
-                             .Value;
-            var CommentNumber = new Regex(@"[0-9]*")
-                             .Match(Agility.SelectSingleNode("/html/body/div[3]/div[3]/div[1]/p").InnerHtml.ToString())
-                             .Value;
-            var School = Agility.SelectSingleNode("/html/body/div[3]/div[1]/div[1]/p[1]").InnerHtml.ToString();
-            var Faculty = Agility.SelectSingleNode("/html/body/div[3]/div[1]/div[1]/p[2]").InnerHtml.ToString();
-            var CallNameRate = new Regex(@"[0-9]*(\.[0-9]+)?%")
-                                    .Match(Agility.SelectSingleNode("/html/body/div[3]/div[1]/div[1]/p[3]/text()").InnerHtml.ToString())
-                                    .Value;
-            #region
-
-            int i = 2;
-            var CourseList = new List<Chalaoshi.CourseAndGPA>();
-
-            List<string> CombineList = new List<string>();// 即将被淘汰
-            while (true)
-            {
-                try
-                {
-                    var courseName = crawledPage.CsQueryDocument.Select($"body > div.main > div:nth-child(2) > div > div:nth-child({i}) > div.left > p").FirstElement().FirstChild.ToString();
-                    var overallGPA = crawledPage.CsQueryDocument.Select($"body > div.main > div:nth-child(2) > div > div:nth-child({i}) > div.right > p").FirstElement().FirstChild.ToString();
-                    var NameGPACombination = courseName + ":" + overallGPA; // 即将被淘汰
-                    CombineList.Add(NameGPACombination);// 即将被淘汰
-                    Chalaoshi.CourseAndGPA newCourse;
-                    newCourse.CourseName = courseName;
-                    newCourse.OverallGPA = overallGPA;
-                    CourseList.Add(newCourse);
-                }
-                catch
-                {
-                    break;
-                }
-                i++;
-            }
-
-            /*
-             * 这块是读取评论。不知道为什么Xpath找不到。我一定能做出来的。
-
-            i = 1;
-            while (true)
-            {
-                try//*[@id="comment-page"]/div/div[1]/p
-                {
-                    var CommentXpath = $"/html/body/div[3]/div[3]/div[2]/div[{i}]/div/p";
-                    var VoteXpath = $"/html/body/div[3]/div[3]/div[2]/div[{i}]/div[1]/div[1]/p";
-                    var comment = Agility.SelectSingleNode(CommentXpath).InnerHtml.ToString();
-                    var voteNum = Agility.SelectSingleNode(VoteXpath).InnerHtml.ToString();
-                    //var commentx = crawledPage.CsQueryDocument.Select(selector).FirstElement().FirstChild.ToString();
-                    i++;
-                }
-                catch
-                {
-                    break;
-                }
-            }
-
-            */
-
-            #endregion
-            var Info = $"{Name},{ID},{Uri},{School},{Faculty},{Score},{CallNameRate},{VoteNumber},{CommentNumber}";
-
-            for (int Loopi = 0; Loopi < CombineList.Count; Loopi++) // 即将被淘汰
-            {
-                Info += $",{CombineList[Loopi]}";
-            }
+            var Name = crawledPage.CsQueryDocument.Select("h3").FirstElement().FirstChild.ToString();
+            var Score = crawledPage.CsQueryDocument.Select("h2").FirstElement().FirstChild.ToString();
+            Score = (Score == "N/A") ? 0.00.ToString() : Score;
+            var Info = $"{Name},{Score},{ID},{Uri}";
 
             //var WriteContent = Name + "\t\t\t" + Score + "\t" + Uri;
 

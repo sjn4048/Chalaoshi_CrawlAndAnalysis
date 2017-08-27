@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Data;
+using System.Data.SqlClient;
 using System.IO;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
@@ -26,6 +28,7 @@ namespace WebCrawler_Console_
         static void Main(string[] args)
         {
             //XmlConfigurator.Configure();//本行控制是否采用log4net提供的log功能
+
             WebCrawlerProcess crawler = new WebCrawlerProcess();
             crawler.StartWebCrawler();
         }
@@ -33,7 +36,7 @@ namespace WebCrawler_Console_
 
     static class Chalaoshi
     {
-        public static int MaximumTeacherPage = 3743;
+        public static int MaximumTeacherPage = 10;
         public static Regex TeacherDataRegex = new Regex("^https://chalaoshi.cn/teacher/\\d+/");
         public struct CourseAndGPA
         {
@@ -71,14 +74,17 @@ namespace WebCrawler_Console_
                 LeftLinkList.Add("https://chalaoshi.cn/teacher/" + i.ToString() + "/");
             }
 
-            for (int Loopi = 0; Loopi < 4; Loopi++) //最多循环6次，还爬不到的就是服务器问题了
+            LeftLinkList.Remove("https://chalaoshi.cn/teacher/2485/");
+            LeftLinkList.Remove("https://chalaoshi.cn/teacher/3433/");
+
+            for (int Loopi = 0; Loopi < 5; Loopi++) //最多循环6次，还爬不到的就是服务器问题了
             {
                 if (LeftLinkList.Count == 0)
                     break;
                 PageLinkList.Clear();
                 LeftLinkList.ForEach(i => PageLinkList.Add(i));
-                Task task = new Task(() =>
-                {
+                //Task task = new Task(() =>
+                //{
                     Parallel.For(0, PageLinkList.Count, (i) =>
                     {
                         var crawler = new PoliteWebCrawler();
@@ -97,12 +103,12 @@ namespace WebCrawler_Console_
                             sw.WriteLine(url + ex.Message);
                         }
                         Console.WriteLine("Finish:" + url);
-                        Thread.Sleep(200);//给服务器休息一下
+                        Thread.Sleep(20);//给服务器休息一下
                     });
-                });
-                task.Start();
-                task.Wait();
-                Thread.Sleep(1000);//给服务器休息一下
+                //});
+                //task.Start();
+                //task.Wait();
+                //Thread.Sleep(200);//给服务器休息一下
             }
 
             if (LeftLinkList.Count > 0)
@@ -175,20 +181,44 @@ namespace WebCrawler_Console_
 
             var Uri = crawledPage.Uri.AbsoluteUri;
             var ID = Regex.Replace(Uri, @"[^0-9]+", "");
-            var Name = Agility.SelectSingleNode("/html/body/div[3]/div[1]/div[1]/h3").InnerHtml.ToString();
-            var Score = Agility.SelectSingleNode("/html/body/div[3]/div[1]/div[2]/h2").InnerHtml.ToString();
+            var Name = Agility.SelectSingleNode("/html/body/div[3]/div[1]/div[1]/h3")?.InnerHtml.ToString();
+            var Score = Agility.SelectSingleNode("/html/body/div[3]/div[1]/div[2]/h2")?.InnerHtml.ToString();
             Score = (Score == "N/A") ? "0.00" : Score;
+
             var VoteNumber = new Regex(@"[0-9]*")
-                             .Match(Agility.SelectSingleNode("/html/body/div[3]/div[1]/div[2]/p").InnerHtml.ToString())
-                             .Value;
-            var CommentNumber = new Regex(@"[0-9]*")
-                             .Match(Agility.SelectSingleNode("/html/body/div[3]/div[3]/div[1]/p").InnerHtml.ToString())
-                             .Value;
-            var School = Agility.SelectSingleNode("/html/body/div[3]/div[1]/div[1]/p[1]").InnerHtml.ToString();
-            var Faculty = Agility.SelectSingleNode("/html/body/div[3]/div[1]/div[1]/p[2]").InnerHtml.ToString();
-            var CallNameRate = new Regex(@"[0-9]*(\.[0-9]+)?%")
+                 .Match(Agility.SelectSingleNode("/html/body/div[3]/div[1]/div[2]/p").InnerHtml.ToString())
+                 .Value;
+            if (VoteNumber == String.Empty)
+            {
+                VoteNumber = "<5";
+            }
+            
+
+            string CommentNumber;
+            try
+            {
+                CommentNumber = new Regex(@"[0-9]*")
+                .Match(Agility.SelectSingleNode("/html/body/div[3]/div[3]/div[1]/p").InnerHtml.ToString())
+                .Value;
+            }
+            catch
+            {
+                CommentNumber = "<5";
+            }
+
+            var School = Agility.SelectSingleNode("/html/body/div[3]/div[1]/div[1]/p[1]")?.InnerHtml.ToString();
+            var Faculty = Agility.SelectSingleNode("/html/body/div[3]/div[1]/div[1]/p[2]")?.InnerHtml.ToString();
+            string CallNameRate;
+            try
+            {
+                CallNameRate = new Regex(@"[0-9]*(\.[0-9]+)?%")
                                     .Match(Agility.SelectSingleNode("/html/body/div[3]/div[1]/div[1]/p[3]/text()").InnerHtml.ToString())
                                     .Value;
+            }
+            catch
+            {
+                CallNameRate = "0.0%";
+            }
             #region
 
             int i = 2;
@@ -239,7 +269,7 @@ namespace WebCrawler_Console_
             */
 
             #endregion
-            var Info = $"{Name},{ID},{Uri},{School},{Faculty},{Score},{CallNameRate},{VoteNumber},{CommentNumber}";
+            var Info = $"{Name},{ID},{Uri},{Faculty},{Score},{CallNameRate},{VoteNumber},{CommentNumber}";
 
             for (int Loopi = 0; Loopi < CombineList.Count; Loopi++) // 即将被淘汰
             {
@@ -265,23 +295,20 @@ namespace WebCrawler_Console_
                 //sw.WriteLine("{0},{1},{2}", Uri, Score, Name);
                 //sw.Close();
                 //file.Close();
-                if (Regex.IsMatch(Score, @"^[+-]?\d*[.]?\d*$"))
+                if (!TotalInfo.Contains(Info))
                 {
-                    if (!TotalInfo.Contains(Info))
-                    {
-                        TotalInfo.Add(Info);
-                        LeftLinkList.Remove(crawledPage.Uri.AbsoluteUri);
-                    }
-                    else
-                    {
-                        FileStream FailLog = new FileStream("FailLog.txt", FileMode.Append, FileAccess.Write, FileShare.ReadWrite);
-                        StreamWriter sw = new StreamWriter(FailLog);
-                        sw.WriteLine(crawledPage.Uri.AbsoluteUri + "Repeated Info Detected");
-                        sw.Close();
-                        FailLog.Close();
-                    }
-                    CrawledPageCount++;
+                    TotalInfo.Add(Info);
+                    LeftLinkList.Remove(crawledPage.Uri.AbsoluteUri);
                 }
+                else
+                {
+                    FileStream FailLog = new FileStream("FailLog.txt", FileMode.Append, FileAccess.Write, FileShare.ReadWrite);
+                    StreamWriter sw = new StreamWriter(FailLog);
+                    sw.WriteLine(crawledPage.Uri.AbsoluteUri + "Repeated Info Detected");
+                    sw.Close();
+                    FailLog.Close();
+                }
+                CrawledPageCount++;
             }
             catch (Exception ex)
             {

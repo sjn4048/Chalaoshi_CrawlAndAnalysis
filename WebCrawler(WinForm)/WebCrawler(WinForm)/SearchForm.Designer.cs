@@ -37,6 +37,7 @@
             this.ClientSize = new System.Drawing.Size(862, 533);
             this.Name = "SearchForm";
             this.Text = "离线搜索";
+            this.Load += new System.EventHandler(this.SearchForm_Load);
             this.ResumeLayout(false);
 
         }

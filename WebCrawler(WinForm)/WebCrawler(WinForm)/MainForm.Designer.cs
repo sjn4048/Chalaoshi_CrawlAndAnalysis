@@ -71,7 +71,7 @@
             this.UpdateLabel.AutoSize = true;
             this.UpdateLabel.Font = new System.Drawing.Font("微软雅黑", 16.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.UpdateLabel.ForeColor = System.Drawing.SystemColors.InfoText;
-            this.UpdateLabel.Location = new System.Drawing.Point(126, 489);
+            this.UpdateLabel.Location = new System.Drawing.Point(126, 510);
             this.UpdateLabel.Name = "UpdateLabel";
             this.UpdateLabel.Size = new System.Drawing.Size(127, 36);
             this.UpdateLabel.TabIndex = 5;
@@ -83,7 +83,7 @@
             this.label1.AutoSize = true;
             this.label1.Font = new System.Drawing.Font("微软雅黑", 16.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.label1.ForeColor = System.Drawing.SystemColors.InfoText;
-            this.label1.Location = new System.Drawing.Point(455, 489);
+            this.label1.Location = new System.Drawing.Point(455, 510);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(71, 36);
             this.label1.TabIndex = 5;
@@ -93,7 +93,7 @@
             // SettingBox
             // 
             this.SettingBox.Image = global::WebCrawler_WinForm_.Properties.Resources.Settings;
-            this.SettingBox.Location = new System.Drawing.Point(418, 322);
+            this.SettingBox.Location = new System.Drawing.Point(418, 343);
             this.SettingBox.Name = "SettingBox";
             this.SettingBox.Size = new System.Drawing.Size(151, 164);
             this.SettingBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
@@ -104,7 +104,7 @@
             // CrawlBox
             // 
             this.CrawlBox.Image = global::WebCrawler_WinForm_.Properties.Resources.Update;
-            this.CrawlBox.Location = new System.Drawing.Point(115, 322);
+            this.CrawlBox.Location = new System.Drawing.Point(115, 343);
             this.CrawlBox.Name = "CrawlBox";
             this.CrawlBox.Size = new System.Drawing.Size(151, 164);
             this.CrawlBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
@@ -139,7 +139,7 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.White;
-            this.ClientSize = new System.Drawing.Size(740, 585);
+            this.ClientSize = new System.Drawing.Size(690, 623);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.UpdateLabel);
             this.Controls.Add(this.SearchLabel);
@@ -150,7 +150,7 @@
             this.Controls.Add(this.DbBox);
             this.ForeColor = System.Drawing.SystemColors.Window;
             this.Name = "MainForm";
-            this.Text = "查老师助手， 离线查询&爬取数据";
+            this.Text = "查老师助手 - 离线查询&爬取数据&智能分析";
             this.Load += new System.EventHandler(this.MainForm_Load);
             ((System.ComponentModel.ISupportInitialize)(this.SettingBox)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.CrawlBox)).EndInit();

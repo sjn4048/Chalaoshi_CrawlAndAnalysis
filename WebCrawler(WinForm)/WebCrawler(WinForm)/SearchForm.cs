@@ -16,5 +16,13 @@ namespace WebCrawler_WinForm_
         {
             InitializeComponent();
         }
+
+        private void SearchForm_Load(object sender, EventArgs e)
+        {
+            try
+            {
+                       
+            }
+        }
     }
 }

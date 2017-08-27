@@ -22,6 +22,7 @@ namespace WebCrawler_WinForm_
             if (checkBox1.Checked == true)
             {
                 var form = new CrawlPage() {StartPosition = FormStartPosition.CenterScreen };
+                this.Hide();
                 form.Show();
                 this.Close();
             }

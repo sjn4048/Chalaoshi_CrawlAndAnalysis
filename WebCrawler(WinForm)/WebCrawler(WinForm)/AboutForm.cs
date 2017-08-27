@@ -26,5 +26,16 @@ namespace WebCrawler_WinForm_
         {
 
         }
+
+        private void AboutForm_FormClosed(object sender, FormClosedEventArgs e)
+        {
+            SettingForm form = new SettingForm() { StartPosition = FormStartPosition.CenterScreen, TopMost = true };
+            form.Show();
+        }
+
+        private void MailLabel_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            System.Diagnostics.Process.Start("mailto:3160105216@zju.edu.cn");
+        }
     }
 }

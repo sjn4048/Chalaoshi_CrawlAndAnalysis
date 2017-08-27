@@ -56,7 +56,7 @@ namespace WebCrawler_WinForm_
 
         private void SearchBox_Click(object sender, EventArgs e)
         {
-            var form = new SearchForm() { StartPosition = FormStartPosition.CenterScreen };
+            var form = new SearchForm() { StartPosition = FormStartPosition.CenterScreen, TopMost = true };
             form.Show();
         }
 
@@ -64,13 +64,12 @@ namespace WebCrawler_WinForm_
         {
             if (DateTime.Now.Month == 8 && DateTime.Now.Day >= 28 && DateTime.Now.Day <= 30)
             {
-                var form = new UpdateFailedDueToTime();
-                form.StartPosition = FormStartPosition.CenterParent;
+                var form = new UpdateFailedDueToTime() { TopMost = true, StartPosition = FormStartPosition.CenterScreen };
                 form.ShowDialog();
             }
             else
             {
-                var form = new CrawlShouldKnow() {StartPosition = FormStartPosition.CenterScreen};
+                var form = new CrawlShouldKnow() {StartPosition = FormStartPosition.CenterScreen, TopMost = true};
                 form.Show();
             }
         }
@@ -78,7 +77,7 @@ namespace WebCrawler_WinForm_
         private void SettingBox_Click(object sender, EventArgs e)
         {
             var form = new SettingForm();
-            form.StartPosition = FormStartPosition.CenterParent;
+            form.StartPosition = FormStartPosition.CenterScreen;
             form.Show();
         }
     }

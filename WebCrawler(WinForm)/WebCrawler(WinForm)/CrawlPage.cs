@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using System.IO;
 using System.Text.RegularExpressions;
 using System.Threading;
+using System.Net.NetworkInformation;
 using System.Diagnostics;
 using System.Configuration;
 using System.Net;
@@ -25,6 +26,22 @@ namespace WebCrawler_WinForm_
 
         private void button1_Click(object sender, EventArgs e)
         {
+            try
+            {
+                Ping ping = new Ping();
+                PingReply pingReply = ping.Send("https://www.baidu.com");
+                if (pingReply.Status != IPStatus.Success)
+                {
+                    MessageBox.Show("抱歉，检测到您的网络未连接或无法使用", "更新失败");
+                    return;
+                }
+            }
+            catch
+            {
+                MessageBox.Show("抱歉，检测到您的网络未连接或无法使用", "更新失败");
+                return;
+            }
+            //以上为联网监测
             WebCrawlerProcess crawler = new WebCrawlerProcess(this);
             task = new Task(()=>crawler.StartWebCrawler(), tokenSource.Token);
             task.Start();

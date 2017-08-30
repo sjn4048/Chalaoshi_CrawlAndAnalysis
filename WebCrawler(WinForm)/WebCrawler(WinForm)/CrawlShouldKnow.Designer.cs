@@ -99,6 +99,8 @@
             this.Controls.Add(this.button2);
             this.Controls.Add(this.button1);
             this.Controls.Add(this.groupBox1);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
+            this.MaximizeBox = false;
             this.Name = "CrawlShouldKnow";
             this.Text = "离线数据更新";
             this.groupBox1.ResumeLayout(false);

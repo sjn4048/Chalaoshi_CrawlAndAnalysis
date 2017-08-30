@@ -17,7 +17,14 @@
             {
                 components.Dispose();
             }
-            base.Dispose(disposing);
+            try
+            {
+                base.Dispose(disposing);
+            }
+            catch
+            {
+
+            }
         }
 
         #region Windows Form Designer generated code
@@ -139,6 +146,8 @@
             this.Controls.Add(this.FinishButton);
             this.Controls.Add(this.button2);
             this.Controls.Add(this.button1);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
+            this.MinimizeBox = false;
             this.Name = "CrawlPage";
             this.Text = "离线数据更新";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.CrawlPage_FormClosing);

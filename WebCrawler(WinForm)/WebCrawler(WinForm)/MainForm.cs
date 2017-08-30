@@ -57,12 +57,19 @@ namespace WebCrawler_WinForm_
         private void SearchBox_Click(object sender, EventArgs e)
         {
             var form = new SearchForm() { StartPosition = FormStartPosition.CenterScreen, TopMost = true };
-            form.Show();
+            try
+            {
+                form.Show();
+            }
+            catch
+            {
+
+            }
         }
 
         private void CrawlBox_Click(object sender, EventArgs e)
         {
-            if (DateTime.Now.Month == 8 && DateTime.Now.Day >= 28 && DateTime.Now.Day <= 30)
+            if (DateTime.Now.Month == 7 && DateTime.Now.Day >= 28 && DateTime.Now.Day <= 30)
             {
                 var form = new UpdateFailedDueToTime() { TopMost = true, StartPosition = FormStartPosition.CenterScreen };
                 form.ShowDialog();

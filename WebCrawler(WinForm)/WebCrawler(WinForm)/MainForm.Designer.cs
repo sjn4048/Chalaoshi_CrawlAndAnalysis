@@ -149,6 +149,8 @@
             this.Controls.Add(this.SearchBox);
             this.Controls.Add(this.DbBox);
             this.ForeColor = System.Drawing.SystemColors.Window;
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
+            this.MaximizeBox = false;
             this.Name = "MainForm";
             this.Text = "查老师助手 - 离线查询&爬取数据&智能分析";
             this.Load += new System.EventHandler(this.MainForm_Load);

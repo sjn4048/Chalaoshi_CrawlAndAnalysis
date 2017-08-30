@@ -156,9 +156,9 @@
             this.label9.Font = new System.Drawing.Font("微软雅黑", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.label9.Location = new System.Drawing.Point(117, 301);
             this.label9.Name = "label9";
-            this.label9.Size = new System.Drawing.Size(221, 23);
+            this.label9.Size = new System.Drawing.Size(231, 23);
             this.label9.TabIndex = 2;
-            this.label9.Text = "灵韵合唱团-故事尬聊小分队";
+            this.label9.Text = "灵韵合唱团 - 故事尬聊小分队";
             // 
             // AboutForm
             // 
@@ -176,6 +176,8 @@
             this.Controls.Add(this.label2);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.NameLabel);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
+            this.MaximizeBox = false;
             this.Name = "AboutForm";
             this.Text = "关于本软件";
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.AboutForm_FormClosed);

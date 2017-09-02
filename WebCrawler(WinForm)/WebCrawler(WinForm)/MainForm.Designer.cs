@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
             this.DBlabel = new System.Windows.Forms.Label();
             this.SearchLabel = new System.Windows.Forms.Label();
             this.UpdateLabel = new System.Windows.Forms.Label();
@@ -36,10 +37,13 @@
             this.CrawlBox = new System.Windows.Forms.PictureBox();
             this.SearchBox = new System.Windows.Forms.PictureBox();
             this.DbBox = new System.Windows.Forms.PictureBox();
+            this.statusStrip1 = new System.Windows.Forms.StatusStrip();
+            this.toolStripStatusLabel1 = new System.Windows.Forms.ToolStripStatusLabel();
             ((System.ComponentModel.ISupportInitialize)(this.SettingBox)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.CrawlBox)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.SearchBox)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.DbBox)).BeginInit();
+            this.statusStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
             // DBlabel
@@ -134,12 +138,35 @@
             this.DbBox.TabStop = false;
             this.DbBox.Click += new System.EventHandler(this.DbBox_Click);
             // 
+            // statusStrip1
+            // 
+            this.statusStrip1.BackColor = System.Drawing.SystemColors.Menu;
+            this.statusStrip1.Font = new System.Drawing.Font("Microsoft YaHei UI Light", 9F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.statusStrip1.ImageScalingSize = new System.Drawing.Size(20, 20);
+            this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.toolStripStatusLabel1});
+            this.statusStrip1.Location = new System.Drawing.Point(0, 603);
+            this.statusStrip1.Name = "statusStrip1";
+            this.statusStrip1.Size = new System.Drawing.Size(690, 22);
+            this.statusStrip1.TabIndex = 6;
+            this.statusStrip1.ItemClicked += new System.Windows.Forms.ToolStripItemClickedEventHandler(this.statusStrip1_ItemClicked);
+            // 
+            // toolStripStatusLabel1
+            // 
+            this.toolStripStatusLabel1.BackColor = System.Drawing.SystemColors.Menu;
+            this.toolStripStatusLabel1.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.toolStripStatusLabel1.ForeColor = System.Drawing.SystemColors.ControlDarkDark;
+            this.toolStripStatusLabel1.Name = "toolStripStatusLabel1";
+            this.toolStripStatusLabel1.Size = new System.Drawing.Size(0, 17);
+            this.toolStripStatusLabel1.Click += new System.EventHandler(this.toolStripStatusLabel1_Click);
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.White;
-            this.ClientSize = new System.Drawing.Size(690, 623);
+            this.ClientSize = new System.Drawing.Size(690, 625);
+            this.Controls.Add(this.statusStrip1);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.UpdateLabel);
             this.Controls.Add(this.SearchLabel);
@@ -150,6 +177,7 @@
             this.Controls.Add(this.DbBox);
             this.ForeColor = System.Drawing.SystemColors.Window;
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximizeBox = false;
             this.Name = "MainForm";
             this.Text = "查老师助手 - 离线查询&爬取数据&智能分析";
@@ -158,6 +186,8 @@
             ((System.ComponentModel.ISupportInitialize)(this.CrawlBox)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.SearchBox)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.DbBox)).EndInit();
+            this.statusStrip1.ResumeLayout(false);
+            this.statusStrip1.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -172,6 +202,8 @@
         private System.Windows.Forms.Label UpdateLabel;
         private System.Windows.Forms.PictureBox SettingBox;
         private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.StatusStrip statusStrip1;
+        private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel1;
     }
 }
 

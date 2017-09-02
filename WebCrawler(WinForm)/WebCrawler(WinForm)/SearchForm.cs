@@ -20,17 +20,7 @@ namespace WebCrawler_WinForm_
 
         private void SearchForm_Load(object sender, EventArgs e)
         {
-            try
-            {
-                FileStream file = new FileStream("CLSDatabase.csv", FileMode.Open, FileAccess.Read);
-                var getData = new GetData();
-                getData.getTeacherDataFromCsv(file);
-            }
-            catch
-            {
-                MessageBox.Show("离线数据库可能被人为删除，请点击“更新数据”重新获取", "Oops...");
-                this.Close();
-            }
+
         }
 
         private void button1_Click(object sender, EventArgs e)
@@ -42,15 +32,159 @@ namespace WebCrawler_WinForm_
             }
             else
             {
+                groupBox1.Controls.Clear();
+                groupBox1.Size = new Size(642, 368);
                 var search = new SearchAlgorithm();
                 var searchedTeacherList = search.SearchTeacherName(keyword);
                 var searchedCourseList = search.SearchCourseName(keyword);
-                for (int i = 0; i < searchedCourseList.Count + searchedCourseList.Count; i++)
+                var xStart = groupBox1.Location.X;
+                var yStart = groupBox1.Location.Y - 35;
+                var step = 42;
+
+                int i = 0;
+                foreach (TeacherData thisTeacher in searchedTeacherList)
                 {
-                    
+                    var nameLabel = new Label()
+                    {
+                        Location = new Point(xStart, yStart + i * step),
+                        Text = thisTeacher.name,
+                        Font = new Font("微软雅黑", 11),
+                        AutoSize = true,
+                    };
+
+                    nameLabel.Click += (s, arg) =>
+                    {
+                        new TeacherDataForm(thisTeacher)
+                        {
+                            TopMost = true,
+                            StartPosition = FormStartPosition.CenterScreen,
+                        }
+                        .Show();
+                    };
+                    var scoreLabel = new Label()
+                    {
+                        Location = new Point(xStart + 400, yStart + i * step),
+                        Text = thisTeacher.score_string,
+                        Font = new Font("微软雅黑", 11),
+                        AutoSize = true,
+                    };
+                    if (thisTeacher.score > 9)
+                    {
+                        scoreLabel.ForeColor = Color.Green;
+                    }
+                    else if (thisTeacher.score > 7.5)
+                    {
+                        scoreLabel.ForeColor = Color.Blue;
+                    }
+                    else if (thisTeacher.score > 6)
+                    {
+                        scoreLabel.ForeColor = Color.Goldenrod;
+                    }
+                    else if (thisTeacher.score > 4)
+                    {
+                        scoreLabel.ForeColor = Color.IndianRed;
+                    }
+                    else
+                    {
+                        scoreLabel.ForeColor = Color.Maroon;
+                    }
+                    i++;
+                    groupBox1.Controls.Add(nameLabel);
+                    groupBox1.Controls.Add(scoreLabel);
                 }
+                foreach (CourseData thisCourse in searchedCourseList)
+                {
+                    var nameLabel = new Label()
+                    {
+                        Location = new Point(xStart, yStart + i * step),
+                        Text = thisCourse.CourseName.Replace("\"",""),
+                        Font = new Font("微软雅黑", 11),
+                        AutoSize = true
+                    };
+                    nameLabel.Click += (s, arg) =>
+                    {
+                        new CourseDataForm(thisCourse)
+                        {
+                            TopMost = true,
+                            StartPosition = FormStartPosition.CenterScreen
+                        }
+                        .Show();
+                    };
+                    groupBox1.Controls.Add(nameLabel);
+
+                    var gpaLabel = new Label()
+                    {
+                        Location = new Point(xStart + 400, yStart + i * step),
+                        Text = $"{thisCourse.OverallGPAOfThisCourse:F2}/{thisCourse.TotalSampleSize}",
+                        Font = new Font("微软雅黑", 11),
+                        AutoSize = true,
+                    };
+                    if (thisCourse.TotalSampleSize > 999)
+                    {
+                        gpaLabel.Text = $"{thisCourse.OverallGPAOfThisCourse:F2}/999+";
+                    }
+                    if (thisCourse.OverallGPAOfThisCourse > 4.5)
+                    {
+                        gpaLabel.ForeColor = Color.Green;
+                    }
+                    else if (thisCourse.OverallGPAOfThisCourse > 4)
+                    {
+                        gpaLabel.ForeColor = Color.Blue;
+                    }
+                    else if (thisCourse.OverallGPAOfThisCourse > 3.5)
+                    {
+                        gpaLabel.ForeColor = Color.Goldenrod;
+                    }
+                    else if (thisCourse.OverallGPAOfThisCourse > 3)
+                    {
+                        gpaLabel.ForeColor = Color.IndianRed;
+                    }
+                    else
+                    {
+                        gpaLabel.ForeColor = Color.Maroon;
+                    }
+                    groupBox1.Controls.Add(gpaLabel);
+                    i++;
+                    if (nameLabel.Text.Length > 17)
+                    {
+                        var nameLabel2 = new Label()
+                        {
+                            Location = new Point(xStart, yStart + i * step),
+                            Text = thisCourse.CourseName.Replace("\"", "").Substring(17),
+                            Font = new Font("微软雅黑", 11),
+                            AutoSize = true
+                        };
+                        nameLabel2.Click += (s, arg) =>
+                        {
+                            new CourseDataForm(thisCourse)
+                            {
+                                TopMost = true,
+                                StartPosition = FormStartPosition.CenterScreen
+                            }
+                            .Show();
+                        };
+                        groupBox1.Controls.Add(nameLabel2);
+                        nameLabel.Text = nameLabel.Text.Substring(0, 17);
+                        i++;
+                    }
+                }
+                var emptyLabel = new Label()
+                {
+                    Text = string.Empty,
+                    Location = new Point(xStart + 400, yStart + i * step + 100),
+                    AutoSize = true
+                };
+                this.Controls.Add(emptyLabel);
             }
-            
+
+        }
+
+        private void textBox1_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter)
+            {
+                button1.PerformClick();
+            }
         }
     }
 }

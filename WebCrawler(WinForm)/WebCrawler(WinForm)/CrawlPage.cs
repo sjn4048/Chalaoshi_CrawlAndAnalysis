@@ -5,6 +5,7 @@ using System.IO;
 using System.Text.RegularExpressions;
 using System.Threading;
 using System.Net.NetworkInformation;
+using System.Text;
 using System.Diagnostics;
 using System.Configuration;
 using System.Net;
@@ -28,22 +29,28 @@ namespace WebCrawler_WinForm_
         {
             try
             {
-                Ping ping = new Ping();
-                PingReply pingReply = ping.Send("https://www.baidu.com");
-                if (pingReply.Status != IPStatus.Success)
+                Ping objPingSender = new Ping();
+                PingOptions objPinOptions = new PingOptions();
+                objPinOptions.DontFragment = true;
+                string data = "";
+                byte[] buffer = Encoding.UTF8.GetBytes(data);
+                int intTimeout = 120;
+                PingReply objPinReply = objPingSender.Send("baidu.com", intTimeout, buffer, objPinOptions);
+                string strInfo = objPinReply.Status.ToString();
+                if (strInfo != "Success")
                 {
-                    MessageBox.Show("抱歉，检测到您的网络未连接或无法使用", "更新失败");
+                    MessageBox.Show("抱歉，检测到您的网络未连接或不稳定，请稍后再试", "更新失败");
                     return;
                 }
             }
             catch
             {
-                MessageBox.Show("抱歉，检测到您的网络未连接或无法使用", "更新失败");
+                MessageBox.Show("抱歉，检测到您的网络未连接或不稳定，请稍后再试", "更新失败");
                 return;
             }
             //以上为联网监测
             WebCrawlerProcess crawler = new WebCrawlerProcess(this);
-            task = new Task(()=>crawler.StartWebCrawler(), tokenSource.Token);
+            task = new Task(() => crawler.StartWebCrawler(), tokenSource.Token);
             task.Start();
         }
 
@@ -57,6 +64,7 @@ namespace WebCrawler_WinForm_
         private void FinishButton_Click(object sender, EventArgs e)
         {
             MessageBox.Show("恭喜你，数据更新已顺利完成", "更新完成");
+            this.Controls.Clear();
             this.Close();
         }
 
@@ -67,7 +75,7 @@ namespace WebCrawler_WinForm_
 
         private void CrawlPage_FormClosing(object sender, FormClosingEventArgs e)
         {
-            
+
         }
 
         private void button2_Click(object sender, EventArgs e)

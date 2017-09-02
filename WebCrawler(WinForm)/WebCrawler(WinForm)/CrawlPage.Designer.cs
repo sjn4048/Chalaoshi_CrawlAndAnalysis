@@ -17,14 +17,7 @@
             {
                 components.Dispose();
             }
-            try
-            {
-                base.Dispose(disposing);
-            }
-            catch
-            {
-
-            }
+            base.Dispose(disposing);
         }
 
         #region Windows Form Designer generated code
@@ -47,7 +40,7 @@
             // 
             // button1
             // 
-            this.button1.Location = new System.Drawing.Point(441, 475);
+            this.button1.Location = new System.Drawing.Point(482, 475);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(119, 32);
             this.button1.TabIndex = 0;
@@ -57,7 +50,7 @@
             // 
             // button2
             // 
-            this.button2.Location = new System.Drawing.Point(586, 475);
+            this.button2.Location = new System.Drawing.Point(607, 475);
             this.button2.Name = "button2";
             this.button2.Size = new System.Drawing.Size(108, 32);
             this.button2.TabIndex = 0;
@@ -67,7 +60,7 @@
             // 
             // FinishButton
             // 
-            this.FinishButton.Location = new System.Drawing.Point(728, 475);
+            this.FinishButton.Location = new System.Drawing.Point(721, 475);
             this.FinishButton.Name = "FinishButton";
             this.FinishButton.Size = new System.Drawing.Size(97, 32);
             this.FinishButton.TabIndex = 0;
@@ -121,7 +114,7 @@
             "更新进程"});
             this.UpdateProcessList.Location = new System.Drawing.Point(44, 27);
             this.UpdateProcessList.Name = "UpdateProcessList";
-            this.UpdateProcessList.Size = new System.Drawing.Size(375, 379);
+            this.UpdateProcessList.Size = new System.Drawing.Size(377, 379);
             this.UpdateProcessList.TabIndex = 2;
             // 
             // progressBar1
@@ -147,7 +140,7 @@
             this.Controls.Add(this.button2);
             this.Controls.Add(this.button1);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
-            this.MinimizeBox = false;
+            this.MaximizeBox = false;
             this.Name = "CrawlPage";
             this.Text = "离线数据更新";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.CrawlPage_FormClosing);

@@ -39,7 +39,7 @@ namespace WebCrawler_WinForm_
                 var searchedCourseList = search.SearchCourseName(keyword);
                 var xStart = groupBox1.Location.X;
                 var yStart = groupBox1.Location.Y - 35;
-                var step = 42;
+                var step = 45;
 
                 int i = 0;
                 foreach (TeacherData thisTeacher in searchedTeacherList)
@@ -48,7 +48,7 @@ namespace WebCrawler_WinForm_
                     {
                         Location = new Point(xStart, yStart + i * step),
                         Text = thisTeacher.name,
-                        Font = new Font("微软雅黑", 11),
+                        Font = new Font("微软雅黑", 12),
                         AutoSize = true,
                     };
 
@@ -65,7 +65,7 @@ namespace WebCrawler_WinForm_
                     {
                         Location = new Point(xStart + 400, yStart + i * step),
                         Text = thisTeacher.score_string,
-                        Font = new Font("微软雅黑", 11),
+                        Font = new Font("微软雅黑", 12),
                         AutoSize = true,
                     };
                     if (thisTeacher.score > 9)
@@ -98,7 +98,7 @@ namespace WebCrawler_WinForm_
                     {
                         Location = new Point(xStart, yStart + i * step),
                         Text = thisCourse.CourseName.Replace("\"",""),
-                        Font = new Font("微软雅黑", 11),
+                        Font = new Font("微软雅黑", 12),
                         AutoSize = true
                     };
                     nameLabel.Click += (s, arg) =>
@@ -116,7 +116,7 @@ namespace WebCrawler_WinForm_
                     {
                         Location = new Point(xStart + 400, yStart + i * step),
                         Text = $"{thisCourse.OverallGPAOfThisCourse:F2}/{thisCourse.TotalSampleSize}",
-                        Font = new Font("微软雅黑", 11),
+                        Font = new Font("微软雅黑", 12),
                         AutoSize = true,
                     };
                     if (thisCourse.TotalSampleSize > 999)
@@ -151,7 +151,7 @@ namespace WebCrawler_WinForm_
                         {
                             Location = new Point(xStart, yStart + i * step),
                             Text = thisCourse.CourseName.Replace("\"", "").Substring(17),
-                            Font = new Font("微软雅黑", 11),
+                            Font = new Font("微软雅黑", 12),
                             AutoSize = true
                         };
                         nameLabel2.Click += (s, arg) =>

@@ -39,6 +39,7 @@
             // 
             // groupBox1
             // 
+            this.groupBox1.AutoSize = true;
             this.groupBox1.Controls.Add(this.label1);
             this.groupBox1.Font = new System.Drawing.Font("微软雅黑", 13.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.groupBox1.Location = new System.Drawing.Point(35, 27);
@@ -94,6 +95,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.AutoScroll = true;
             this.ClientSize = new System.Drawing.Size(862, 533);
             this.Controls.Add(this.checkBox1);
             this.Controls.Add(this.button2);
@@ -103,6 +105,7 @@
             this.MaximizeBox = false;
             this.Name = "CrawlShouldKnow";
             this.Text = "离线数据更新";
+            this.Load += new System.EventHandler(this.CrawlShouldKnow_Load);
             this.groupBox1.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();

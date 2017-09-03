@@ -51,11 +51,11 @@
             this.DBlabel.AutoSize = true;
             this.DBlabel.Font = new System.Drawing.Font("微软雅黑", 16.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.DBlabel.ForeColor = System.Drawing.SystemColors.InfoText;
-            this.DBlabel.Location = new System.Drawing.Point(111, 241);
+            this.DBlabel.Location = new System.Drawing.Point(126, 241);
             this.DBlabel.Name = "DBlabel";
-            this.DBlabel.Size = new System.Drawing.Size(155, 36);
+            this.DBlabel.Size = new System.Drawing.Size(127, 36);
             this.DBlabel.TabIndex = 5;
-            this.DBlabel.Text = "查看数据库";
+            this.DBlabel.Text = "查看榜单";
             this.DBlabel.Click += new System.EventHandler(this.DbBox_Click);
             // 
             // SearchLabel
@@ -130,7 +130,7 @@
             // DbBox
             // 
             this.DbBox.Image = global::WebCrawler_WinForm_.Properties.Resources.数据库;
-            this.DbBox.Location = new System.Drawing.Point(128, 74);
+            this.DbBox.Location = new System.Drawing.Point(124, 74);
             this.DbBox.Name = "DbBox";
             this.DbBox.Size = new System.Drawing.Size(138, 164);
             this.DbBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
@@ -145,7 +145,7 @@
             this.statusStrip1.ImageScalingSize = new System.Drawing.Size(20, 20);
             this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripStatusLabel1});
-            this.statusStrip1.Location = new System.Drawing.Point(0, 603);
+            this.statusStrip1.Location = new System.Drawing.Point(0, 617);
             this.statusStrip1.Name = "statusStrip1";
             this.statusStrip1.Size = new System.Drawing.Size(690, 22);
             this.statusStrip1.TabIndex = 6;
@@ -162,10 +162,9 @@
             // 
             // MainForm
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 15F);
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
             this.BackColor = System.Drawing.Color.White;
-            this.ClientSize = new System.Drawing.Size(690, 625);
+            this.ClientSize = new System.Drawing.Size(690, 639);
             this.Controls.Add(this.statusStrip1);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.UpdateLabel);

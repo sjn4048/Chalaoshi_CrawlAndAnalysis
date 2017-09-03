@@ -75,7 +75,7 @@ namespace WebCrawler_WinForm_
 
         private void CrawlPage_FormClosing(object sender, FormClosingEventArgs e)
         {
-
+            this.Controls.Clear();
         }
 
         private void button2_Click(object sender, EventArgs e)

@@ -74,14 +74,14 @@ namespace WebCrawler_WinForm_
             this.Controls.Add(groupBox2);
 
             int i = 0;
-            int step = 50;
+            int step = 45;
 
             groupBox2.Controls.Add(new Label()
             {
-                Text = "教师名称",
+                Text = "教师姓名",
                 Font = new Font("微软雅黑", 11, FontStyle.Underline),
                 Location = new Point(30, 30),
-                AutoSize = true
+                AutoSize = true,
             });
 
             groupBox2.Controls.Add(new Label()
@@ -165,11 +165,11 @@ namespace WebCrawler_WinForm_
                     Location = new Point(470, 80 + i * step),
                     AutoSize = true
                 };
-                if (selectedCourse.OverallGPAOfTeacher / courseData.OverallGPAOfThisCourse > 1.05)
+                if (selectedCourse.OverallGPAOfTeacher / courseData.OverallGPAOfThisCourse > 1.07)
                 {
                     hisCourseGPALabel.ForeColor = Color.Green;
                 }
-                else if (selectedCourse.OverallGPAOfTeacher / courseData.OverallGPAOfThisCourse > 0.95)
+                else if (selectedCourse.OverallGPAOfTeacher / courseData.OverallGPAOfThisCourse > 0.93)
                 {
                     hisCourseGPALabel.ForeColor = Color.Goldenrod;
                 }

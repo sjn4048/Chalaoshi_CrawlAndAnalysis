@@ -22,6 +22,7 @@ namespace WebCrawler_WinForm_
         {
             InitializeComponent();
             StartLoadingTask();
+            Control.CheckForIllegalCrossThreadCalls = false;
         }
 
         private void 帮助HToolStripMenuItem_Click(object sender, EventArgs e)
@@ -58,7 +59,12 @@ namespace WebCrawler_WinForm_
 
         private void DbBox_Click(object sender, EventArgs e)
         {
-
+            new BillboardForm
+            {
+                TopMost = true,
+                StartPosition = FormStartPosition.CenterScreen
+            }
+            .Show();
         }
 
         private void SearchBox_Click(object sender, EventArgs e)

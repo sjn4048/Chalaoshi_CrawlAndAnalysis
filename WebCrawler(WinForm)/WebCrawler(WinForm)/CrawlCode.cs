@@ -29,11 +29,9 @@ namespace WebCrawler_WinForm_
         {
             this.crawlPage = form;
         }
-        static int CrawledPageCount = 0;//已爬的页面数
-        static int FailedPageCount = 0;//用于debug
 
-        public List<string> PageLinkList = new List<string>();
-        public List<string> LeftLinkList = new List<string>();
+        public List<int> IDList = new List<int>();
+        public List<int> LeftIDList = new List<int>();
         public List<string> TotalInfo = new List<string>();
 
         public void StartWebCrawler()
@@ -44,21 +42,22 @@ namespace WebCrawler_WinForm_
 
             for (int i = 1; i <= Chalaoshi.MaximumTeacherPage; i++)
             {
-                LeftLinkList.Add("https://chalaoshi.cn/teacher/" + i.ToString() + "/");
+                LeftIDList.Add(i);
             }
-            LeftLinkList.Remove("https://chalaoshi.cn/teacher/2485/");//这两个网址有问题
-            LeftLinkList.Remove("https://chalaoshi.cn/teacher/3433/");
+            LeftIDList.Remove(2485);//这两个网址(ID)有问题
+            LeftIDList.Remove(3433);
+
+            #region
 
             for (int Loopi = 0; Loopi < 5; Loopi++) //循环，还爬不到的就是服务器问题了
             {
-                if (LeftLinkList.Count == 0)
-                    break;
-                PageLinkList.Clear();
-                LeftLinkList.ForEach(i => PageLinkList.Add(i));
-                Parallel.For(0, PageLinkList.Count, (i) =>
+                IDList.Clear();
+                LeftIDList.RemoveAll(m => m == 0);
+                LeftIDList.Distinct().ToList().ForEach(i => IDList.Add(i));
+                Parallel.For(0, IDList.Count, (i) =>
                 {
                     var crawler = new PoliteWebCrawler(crawlConfig, null, null, null, null, null, null, null, null);
-                    var url = PageLinkList[i];
+                    var url = "https://chalaoshi.cn/teacher/" + IDList[i].ToString() + "/";
                     //crawler.PageLinksCrawlDisallowedAsync += crawler_PageLinksCrawlDisallowed;
 
                     if (!string.IsNullOrEmpty(url))
@@ -77,35 +76,26 @@ namespace WebCrawler_WinForm_
                             crawlPage.UpdateProcessList.Items.Add($"completed with error: {crawlResult.ErrorException.Message}");
                         }
                     }
-                    Thread.Sleep(500);//给服务器休息一下
                 });
-                Thread.Sleep(1000);
+                //Thread.Sleep();
             }
+            
+            #endregion
 
-            if (LeftLinkList.Count > 0)
+
+            if (LeftIDList.Count > 0 && File.Exists("CLSDatabase.csv"))
             {
-                for (int i = 0; i < LeftLinkList.Count; i++)
+                foreach (var leftLink in LeftIDList)
                 {
                     if (crawlPage.checkBox2.Checked == true)
                     {
-                        crawlPage.FailLogBox.Items.Add($"#{LeftLinkList[i]}#未写入");
+                        crawlPage.FailLogBox.Items.Add($"{leftLink}：未写入");
                     }
                 }
             }
+            else
             {
-                var fileName = $"CLSDatabase.csv";
-                FileStream file = new FileStream(fileName, FileMode.Create, FileAccess.ReadWrite);//在此处定义，保证读写锁的最大性能
-                StreamWriter streamWriter = new StreamWriter(file, Encoding.Default); // 创建写入流
-                for (int i = 0; i < TotalInfo.Count; i++)
-                {
-                    streamWriter.WriteLine(TotalInfo[i]);
-                }
-                if (crawlPage.checkBox1.Checked == true)
-                {
-                    crawlPage.UpdateProcessList.Items.Add("数据库已成功更新");
-                }
-                streamWriter.Close();
-                file.Close();
+                WriteIntoCSV();//写入csv
             }
 
             stopwatch.Stop();
@@ -118,6 +108,7 @@ namespace WebCrawler_WinForm_
                     crawlPage.UpdateProcessList.Items.Add($"总页面数:{TotalInfo.Count}");
                     crawlPage.UpdateProcessList.Items.Add($"页面平均耗时:{stopwatch.ElapsedMilliseconds / TotalInfo.Count}毫秒.");
                     crawlPage.UpdateProcessList.TopIndex = crawlPage.UpdateProcessList.Items.Count - 1;
+                    crawlPage.progressBar1.Value = crawlPage.progressBar1.Maximum;
                 }
             }
             catch
@@ -127,7 +118,6 @@ namespace WebCrawler_WinForm_
                     crawlPage.UpdateProcessList.Items.Add("当前已爬网页数量为0");
                 }
             }
-
             crawlPage.FinishButton.Show();
         }
 
@@ -204,14 +194,14 @@ namespace WebCrawler_WinForm_
             int i = 2;
             var CourseList = new List<CourseData>();
 
-            List<string> CombineList = new List<string>();// 即将被淘汰
+            List<string> CombineList = new List<string>();
             while (true)
             {
                 try
                 {
                     var courseName = crawledPage.CsQueryDocument.Select($"body > div.main > div:nth-child(2) > div > div:nth-child({i}) > div.left > p").FirstElement().FirstChild.ToString();
                     var overallGPA = crawledPage.CsQueryDocument.Select($"body > div.main > div:nth-child(2) > div > div:nth-child({i}) > div.right > p").FirstElement().FirstChild.ToString();
-                    
+
                     string overallGPA_number = overallGPA.Substring(0, 4);
                     string GPASampleSize_size = overallGPA.Substring(5);
 
@@ -250,13 +240,10 @@ namespace WebCrawler_WinForm_
             #endregion
 
             var Info = $"{Name},{ID},{Uri},{Faculty},{Score},{CallNameRate},{VoteNumber},{CommentNumber}";
-
-            for (int Loopi = 0; Loopi < CombineList.Count; Loopi++) // 即将被淘汰
+            for (int Loopi = 0; Loopi < CombineList.Count; Loopi++)
             {
                 Info += $",{CombineList[Loopi]}";
             }
-
-            //var WriteContent = Name + "\t\t\t" + Score + "\t" + Uri;
 
             if (Uri == string.Empty || Score == string.Empty || Name == string.Empty)
             {
@@ -267,37 +254,25 @@ namespace WebCrawler_WinForm_
                 return;
             }
 
-            try
+            if (!TotalInfo.Contains(Info) && !string.IsNullOrEmpty(Uri))
             {
-                if (!TotalInfo.Contains(Info) && !string.IsNullOrEmpty(Uri))
+                TotalInfo.Add(Info);
+                LeftIDList.Remove(int.Parse(ID));
+                if (crawlPage.progressBar1.Value < crawlPage.progressBar1.Maximum)
                 {
-                    TotalInfo.Add(Info);
-                    LeftLinkList.Remove(crawledPage.Uri.AbsoluteUri);
-                    if (crawlPage.progressBar1.Value < crawlPage.progressBar1.Maximum)
-                    {
-                        crawlPage.progressBar1.Value += crawlPage.progressBar1.Step;
-                    }
-                    if (crawlPage.checkBox1.Checked == true)
-                    {
-                        crawlPage.UpdateProcessList.Items.Add("finish:" + crawledPage.Uri.AbsoluteUri);
-                        crawlPage.UpdateProcessList.TopIndex = crawlPage.UpdateProcessList.Items.Count - 1;
-                    }
+                    crawlPage.progressBar1.Value += crawlPage.progressBar1.Step;
                 }
-                else
+                if (crawlPage.checkBox1.Checked == true)
                 {
-                    if (crawlPage.checkBox2.Checked == true)
-                    {
-                        crawlPage.FailLogBox.Items.Add(crawledPage.Uri.AbsoluteUri + "Repeated Info Detected");
-                    }
+                    crawlPage.UpdateProcessList.Items.Add("finish:" + crawledPage.Uri.AbsoluteUri);
+                    crawlPage.UpdateProcessList.TopIndex = crawlPage.UpdateProcessList.Items.Count - 1;
                 }
-                CrawledPageCount++;
             }
-            catch (Exception ex)
+            else if (TotalInfo.Contains(Info))
             {
-                FailedPageCount++;
                 if (crawlPage.checkBox2.Checked == true)
                 {
-                    crawlPage.FailLogBox.Items.Add(ex.Message);
+                    LeftIDList.Remove(int.Parse(ID));
                 }
             }
         }
@@ -322,6 +297,23 @@ namespace WebCrawler_WinForm_
                 form.UpdateProcessList.Items.Add($"Did not crawl page {pageToCrawl.Uri.AbsoluteUri} due to {e.DisallowedReason}");
                 crawlPage.UpdateProcessList.TopIndex = crawlPage.UpdateProcessList.Items.Count - 1;
             }
+        }
+
+        void WriteIntoCSV()
+        {
+            var fileName = $"CLSDatabase.csv";
+            FileStream file = new FileStream(fileName, FileMode.Create, FileAccess.ReadWrite);//在此处定义，保证读写锁的最大性能
+            StreamWriter streamWriter = new StreamWriter(file, Encoding.Default); // 创建写入流
+            for (int i = 0; i < TotalInfo.Count; i++)
+            {
+                streamWriter.WriteLine(TotalInfo[i]);
+            }
+            if (crawlPage.checkBox1.Checked == true)
+            {
+                crawlPage.UpdateProcessList.Items.Add("数据库已成功更新");
+            }
+            streamWriter.Close();
+            file.Close();
         }
     }
 }

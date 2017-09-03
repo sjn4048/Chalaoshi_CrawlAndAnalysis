@@ -46,5 +46,10 @@ namespace WebCrawler_WinForm_
         {
 
         }
+
+        private void CrawlShouldKnow_Load(object sender, EventArgs e)
+        {
+
+        }
     }
 }

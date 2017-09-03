@@ -106,7 +106,7 @@ namespace WebCrawler_WinForm_
 
             var courseLabel = new Label()
             {
-                Text = "课程名称",
+                Text = "课程名称（点击查看详情）",
                 Font = new Font("微软雅黑", 12, FontStyle.Underline),
                 Location = new Point(35, 20),
                 AutoSize = true
@@ -123,90 +123,105 @@ namespace WebCrawler_WinForm_
             groupBox2.Controls.Add(courseGPALabel);
 
             int i = 0;
-            int step = 50;
-            foreach (CourseData thisCourse in teacherData.courseList)
+            int step = 45;
+            if (teacherData.courseList.Count == 0)
             {
-                var thisCourseLabel = new Label()
+                var noCourseLabel = new Label()
                 {
-                    Text = thisCourse.CourseName.Replace("\"", ""),
+                    Text = "暂无这位老师的授课数据",
                     Font = new Font("微软雅黑", 11, FontStyle.Regular),
-                    Location = new Point(35, 70 + i * step),
+                    Location = new Point(35, 70),
                     AutoSize = true
                 };
+                groupBox2.Controls.Add(noCourseLabel);
+            }
 
-                CourseData selectedCourse = null;
-                foreach (CourseData course in CourseData.courseDataList)
+            else
+            {
+                foreach (CourseData thisCourse in teacherData.courseList)
                 {
-                    if (course.CourseName.Replace("\"", "") == thisCourseLabel.Text)
+                    var thisCourseLabel = new Label()
                     {
-                        selectedCourse = course;
-                        break;
-                    }
-                }
-
-                thisCourseLabel.Click += (s, arg) =>
-                {
-                    if (selectedCourse != null)
-                    {
-                        new CourseDataForm(selectedCourse)
-                        {
-                            TopMost = true,
-                            StartPosition = FormStartPosition.CenterScreen,
-                        }
-                        .Show();
-                    }
-                };
-                groupBox2.Controls.Add(thisCourseLabel);
-                var thisCourseGPALabel = new Label()
-                {
-                    Text = $"{thisCourse.OverallGPAOfTeacher}/{thisCourse.GPASampleSizeOfTeacher_int}",
-                    Font = new Font("微软雅黑", 11, FontStyle.Regular),
-                    Location = new Point(400, 70 + i * step),
-                    AutoSize = true
-                };
-                if (thisCourse.OverallGPAOfTeacher > 4.5)
-                {
-                    thisCourseGPALabel.ForeColor = Color.Green;
-                }
-                else if (thisCourse.OverallGPAOfTeacher > 4)
-                {
-                    thisCourseGPALabel.ForeColor = Color.Blue;
-                }
-                else if (thisCourse.OverallGPAOfTeacher > 3.5)
-                {
-                    thisCourseGPALabel.ForeColor = Color.Goldenrod;
-                }
-                else if (thisCourse.OverallGPAOfTeacher > 3)
-                {
-                    thisCourseGPALabel.ForeColor = Color.IndianRed;
-                }
-                else
-                {
-                    thisCourseGPALabel.ForeColor = Color.Maroon;
-                }
-                groupBox2.Controls.Add(thisCourseGPALabel);
-                i++;
-                if (thisCourseLabel.Text.Length > 17)
-                {
-                    var nameLabel2 = new Label()
-                    {
+                        Text = thisCourse.CourseName.Replace("\"", ""),
+                        Font = new Font("微软雅黑", 11, FontStyle.Regular),
                         Location = new Point(35, 70 + i * step),
-                        Text = thisCourse.CourseName.Replace("\"", "").Substring(17),
-                        Font = new Font("微软雅黑", 11),
                         AutoSize = true
                     };
-                    nameLabel2.Click += (s, arg) =>
+
+                    CourseData selectedCourse = null;
+                    foreach (CourseData course in CourseData.courseDataList)
                     {
-                        new CourseDataForm(thisCourse)
+                        if (course.CourseName.Replace("\"", "") == thisCourseLabel.Text)
                         {
-                            TopMost = true,
-                            StartPosition = FormStartPosition.CenterScreen
+                            selectedCourse = course;
+                            break;
                         }
-                        .Show();
+                    }
+
+                    thisCourseLabel.Click += (s, arg) =>
+                    {
+                        if (selectedCourse != null)
+                        {
+                            new CourseDataForm(selectedCourse)
+                            {
+                                TopMost = true,
+                                StartPosition = FormStartPosition.CenterScreen,
+                            }
+                            .Show();
+                        }
                     };
-                    groupBox2.Controls.Add(nameLabel2);
-                    thisCourseLabel.Text = thisCourseLabel.Text.Substring(0, 17);
+                    groupBox2.Controls.Add(thisCourseLabel);
+                    var thisCourseGPALabel = new Label()
+                    {
+                        Text = $"{thisCourse.OverallGPAOfTeacher}/{thisCourse.GPASampleSizeOfTeacher_int}",
+                        Font = new Font("微软雅黑", 11, FontStyle.Regular),
+                        Location = new Point(400, 70 + i * step),
+                        AutoSize = true
+                    };
+                    if (thisCourse.OverallGPAOfTeacher > 4.5)
+                    {
+                        thisCourseGPALabel.ForeColor = Color.Green;
+                    }
+                    else if (thisCourse.OverallGPAOfTeacher > 4)
+                    {
+                        thisCourseGPALabel.ForeColor = Color.Blue;
+                    }
+                    else if (thisCourse.OverallGPAOfTeacher > 3.5)
+                    {
+                        thisCourseGPALabel.ForeColor = Color.Goldenrod;
+                    }
+                    else if (thisCourse.OverallGPAOfTeacher > 3)
+                    {
+                        thisCourseGPALabel.ForeColor = Color.IndianRed;
+                    }
+                    else
+                    {
+                        thisCourseGPALabel.ForeColor = Color.Maroon;
+                    }
+                    groupBox2.Controls.Add(thisCourseGPALabel);
                     i++;
+                    if (thisCourseLabel.Text.Length > 17)
+                    {
+                        var nameLabel2 = new Label()
+                        {
+                            Location = new Point(35, 70 + i * step),
+                            Text = thisCourse.CourseName.Replace("\"", "").Substring(17),
+                            Font = new Font("微软雅黑", 11),
+                            AutoSize = true
+                        };
+                        nameLabel2.Click += (s, arg) =>
+                        {
+                            new CourseDataForm(thisCourse)
+                            {
+                                TopMost = true,
+                                StartPosition = FormStartPosition.CenterScreen
+                            }
+                            .Show();
+                        };
+                        groupBox2.Controls.Add(nameLabel2);
+                        thisCourseLabel.Text = thisCourseLabel.Text.Substring(0, 17);
+                        i++;
+                    }
                 }
             }
             var emptyLabel = new Label()

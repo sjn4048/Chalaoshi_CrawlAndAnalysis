@@ -48,6 +48,15 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
+  <PropertyGroup>
+    <TargetZone>LocalIntranet</TargetZone>
+  </PropertyGroup>
+  <PropertyGroup>
+    <GenerateManifests>false</GenerateManifests>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationManifest>Properties\app.manifest</ApplicationManifest>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="Abot, Version=1.5.1.69, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\Abot.1.5.1.69\lib\net40\Abot.dll</HintPath>
@@ -71,6 +80,7 @@
     <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Messaging" />
+    <Reference Include="System.Web.Extensions" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -87,6 +97,12 @@
     </Compile>
     <Compile Include="AboutForm.Designer.cs">
       <DependentUpon>AboutForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="BillboardForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="BillboardForm.Designer.cs">
+      <DependentUpon>BillboardForm.cs</DependentUpon>
     </Compile>
     <Compile Include="CourseDataForm.cs">
       <SubType>Form</SubType>
@@ -187,6 +203,7 @@
       <DependentUpon>WaitForm.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="packages.config" />
+    <None Include="Properties\app.manifest" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>

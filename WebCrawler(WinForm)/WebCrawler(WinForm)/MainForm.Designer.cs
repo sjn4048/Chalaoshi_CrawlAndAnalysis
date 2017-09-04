@@ -33,17 +33,17 @@
             this.SearchLabel = new System.Windows.Forms.Label();
             this.UpdateLabel = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
+            this.statusStrip1 = new System.Windows.Forms.StatusStrip();
+            this.toolStripStatusLabel1 = new System.Windows.Forms.ToolStripStatusLabel();
             this.SettingBox = new System.Windows.Forms.PictureBox();
             this.CrawlBox = new System.Windows.Forms.PictureBox();
             this.SearchBox = new System.Windows.Forms.PictureBox();
             this.DbBox = new System.Windows.Forms.PictureBox();
-            this.statusStrip1 = new System.Windows.Forms.StatusStrip();
-            this.toolStripStatusLabel1 = new System.Windows.Forms.ToolStripStatusLabel();
+            this.statusStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.SettingBox)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.CrawlBox)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.SearchBox)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.DbBox)).BeginInit();
-            this.statusStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
             // DBlabel
@@ -51,11 +51,11 @@
             this.DBlabel.AutoSize = true;
             this.DBlabel.Font = new System.Drawing.Font("微软雅黑", 16.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.DBlabel.ForeColor = System.Drawing.SystemColors.InfoText;
-            this.DBlabel.Location = new System.Drawing.Point(126, 241);
+            this.DBlabel.Location = new System.Drawing.Point(414, 236);
             this.DBlabel.Name = "DBlabel";
             this.DBlabel.Size = new System.Drawing.Size(127, 36);
             this.DBlabel.TabIndex = 5;
-            this.DBlabel.Text = "查看榜单";
+            this.DBlabel.Text = "趣味榜单";
             this.DBlabel.Click += new System.EventHandler(this.DbBox_Click);
             // 
             // SearchLabel
@@ -63,7 +63,7 @@
             this.SearchLabel.AutoSize = true;
             this.SearchLabel.Font = new System.Drawing.Font("微软雅黑", 16.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.SearchLabel.ForeColor = System.Drawing.SystemColors.InfoText;
-            this.SearchLabel.Location = new System.Drawing.Point(425, 241);
+            this.SearchLabel.Location = new System.Drawing.Point(122, 236);
             this.SearchLabel.Name = "SearchLabel";
             this.SearchLabel.Size = new System.Drawing.Size(127, 36);
             this.SearchLabel.TabIndex = 5;
@@ -87,17 +87,39 @@
             this.label1.AutoSize = true;
             this.label1.Font = new System.Drawing.Font("微软雅黑", 16.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.label1.ForeColor = System.Drawing.SystemColors.InfoText;
-            this.label1.Location = new System.Drawing.Point(455, 510);
+            this.label1.Location = new System.Drawing.Point(439, 510);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(71, 36);
             this.label1.TabIndex = 5;
             this.label1.Text = "设置";
             this.label1.Click += new System.EventHandler(this.SettingBox_Click);
             // 
+            // statusStrip1
+            // 
+            this.statusStrip1.BackColor = System.Drawing.SystemColors.Menu;
+            this.statusStrip1.Font = new System.Drawing.Font("Microsoft YaHei UI Light", 9F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.statusStrip1.ImageScalingSize = new System.Drawing.Size(20, 20);
+            this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.toolStripStatusLabel1});
+            this.statusStrip1.Location = new System.Drawing.Point(0, 617);
+            this.statusStrip1.Name = "statusStrip1";
+            this.statusStrip1.Size = new System.Drawing.Size(666, 22);
+            this.statusStrip1.TabIndex = 6;
+            this.statusStrip1.ItemClicked += new System.Windows.Forms.ToolStripItemClickedEventHandler(this.statusStrip1_ItemClicked);
+            // 
+            // toolStripStatusLabel1
+            // 
+            this.toolStripStatusLabel1.BackColor = System.Drawing.SystemColors.Menu;
+            this.toolStripStatusLabel1.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.toolStripStatusLabel1.ForeColor = System.Drawing.SystemColors.ControlDarkDark;
+            this.toolStripStatusLabel1.Name = "toolStripStatusLabel1";
+            this.toolStripStatusLabel1.Size = new System.Drawing.Size(0, 17);
+            this.toolStripStatusLabel1.Click += new System.EventHandler(this.toolStripStatusLabel1_Click);
+            // 
             // SettingBox
             // 
             this.SettingBox.Image = global::WebCrawler_WinForm_.Properties.Resources.Settings;
-            this.SettingBox.Location = new System.Drawing.Point(418, 343);
+            this.SettingBox.Location = new System.Drawing.Point(402, 343);
             this.SettingBox.Name = "SettingBox";
             this.SettingBox.Size = new System.Drawing.Size(151, 164);
             this.SettingBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
@@ -119,7 +141,7 @@
             // SearchBox
             // 
             this.SearchBox.Image = global::WebCrawler_WinForm_.Properties.Resources.搜索_矢量;
-            this.SearchBox.Location = new System.Drawing.Point(418, 74);
+            this.SearchBox.Location = new System.Drawing.Point(115, 69);
             this.SearchBox.Name = "SearchBox";
             this.SearchBox.Size = new System.Drawing.Size(151, 164);
             this.SearchBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
@@ -130,7 +152,7 @@
             // DbBox
             // 
             this.DbBox.Image = global::WebCrawler_WinForm_.Properties.Resources.数据库;
-            this.DbBox.Location = new System.Drawing.Point(124, 74);
+            this.DbBox.Location = new System.Drawing.Point(412, 69);
             this.DbBox.Name = "DbBox";
             this.DbBox.Size = new System.Drawing.Size(138, 164);
             this.DbBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
@@ -138,33 +160,11 @@
             this.DbBox.TabStop = false;
             this.DbBox.Click += new System.EventHandler(this.DbBox_Click);
             // 
-            // statusStrip1
-            // 
-            this.statusStrip1.BackColor = System.Drawing.SystemColors.Menu;
-            this.statusStrip1.Font = new System.Drawing.Font("Microsoft YaHei UI Light", 9F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.statusStrip1.ImageScalingSize = new System.Drawing.Size(20, 20);
-            this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.toolStripStatusLabel1});
-            this.statusStrip1.Location = new System.Drawing.Point(0, 617);
-            this.statusStrip1.Name = "statusStrip1";
-            this.statusStrip1.Size = new System.Drawing.Size(690, 22);
-            this.statusStrip1.TabIndex = 6;
-            this.statusStrip1.ItemClicked += new System.Windows.Forms.ToolStripItemClickedEventHandler(this.statusStrip1_ItemClicked);
-            // 
-            // toolStripStatusLabel1
-            // 
-            this.toolStripStatusLabel1.BackColor = System.Drawing.SystemColors.Menu;
-            this.toolStripStatusLabel1.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.toolStripStatusLabel1.ForeColor = System.Drawing.SystemColors.ControlDarkDark;
-            this.toolStripStatusLabel1.Name = "toolStripStatusLabel1";
-            this.toolStripStatusLabel1.Size = new System.Drawing.Size(0, 17);
-            this.toolStripStatusLabel1.Click += new System.EventHandler(this.toolStripStatusLabel1_Click);
-            // 
             // MainForm
             // 
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
             this.BackColor = System.Drawing.Color.White;
-            this.ClientSize = new System.Drawing.Size(690, 639);
+            this.ClientSize = new System.Drawing.Size(666, 639);
             this.Controls.Add(this.statusStrip1);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.UpdateLabel);
@@ -181,12 +181,12 @@
             this.Name = "MainForm";
             this.Text = "查老师助手 - 离线查询&爬取数据&智能分析";
             this.Load += new System.EventHandler(this.MainForm_Load);
+            this.statusStrip1.ResumeLayout(false);
+            this.statusStrip1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.SettingBox)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.CrawlBox)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.SearchBox)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.DbBox)).EndInit();
-            this.statusStrip1.ResumeLayout(false);
-            this.statusStrip1.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 

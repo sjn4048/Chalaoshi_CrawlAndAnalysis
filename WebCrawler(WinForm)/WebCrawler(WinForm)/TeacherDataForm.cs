@@ -69,22 +69,19 @@ namespace WebCrawler_WinForm_
                 AutoSize = true
             };
             groupBox1.Controls.Add(scoreLabel);
-            var voteLabel = new Label()
+            var hotLabel = new Label()
             {
-                Text = $"评分人数：{teacherData.voteNum_string}",
+                Text = $"热度：{teacherData.voteNum_int + teacherData.commentNum_int}",
                 Font = new Font("微软雅黑", 11, FontStyle.Regular),
                 Location = new Point(400, 90),
                 AutoSize = true
             };
-            groupBox1.Controls.Add(voteLabel);
-            var commentNumLabel = new Label()
+            if (hotLabel.Text == "0")
             {
-                Text = $"评论人数：{teacherData.commentNum_string}",
-                Font = new Font("微软雅黑", 11, FontStyle.Regular),
-                Location = new Point(400, 120),
-                AutoSize = true
-            };
-            groupBox1.Controls.Add(commentNumLabel);
+                hotLabel.Text = "<10";
+            }
+            groupBox1.Controls.Add(hotLabel);
+
             var callNameRateLabel = new Label()
             {
                 Text = $"点名率：{teacherData.callNameRate_string}",
@@ -178,7 +175,11 @@ namespace WebCrawler_WinForm_
                         Location = new Point(400, 70 + i * step),
                         AutoSize = true
                     };
-                    if (thisCourse.OverallGPAOfTeacher > 4.5)
+                    if (selectedCourse.GPASampleSizeOfTeacher_int == 0 || selectedCourse.OverallGPAOfTeacher == 0)
+                    {
+                        thisCourseGPALabel.ForeColor = Color.DarkGray;
+                    }
+                    else if (thisCourse.OverallGPAOfTeacher > 4.5)
                     {
                         thisCourseGPALabel.ForeColor = Color.Green;
                     }

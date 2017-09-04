@@ -46,6 +46,7 @@ namespace WebCrawler_WinForm_
         public int commentNum_int;
         public string commentNum_string;
         public List<CourseData> courseList = new List<CourseData>();
+        public CourseData templateCourse;
 
         public static List<TeacherData> totalTeacherList = new List<TeacherData>();
     }
@@ -158,10 +159,26 @@ namespace WebCrawler_WinForm_
 
     public class SearchAlgorithm
     {
+        public List<TeacherData> SearchTeacherName(string keyword, int maxResults)
+        {
+            List<TeacherData> searchedTeacherList = new List<TeacherData>();
+            int i = 0;
+            foreach (var teacher in TeacherData.totalTeacherList)
+            {
+                if (teacher.name.ToLower().Contains(keyword.ToLower()))
+                {
+                    searchedTeacherList.Add(teacher);
+                    i++;
+                    if (i >= maxResults) break;
+                }
+            }
+            return searchedTeacherList;
+        }
+
         public List<TeacherData> SearchTeacherName(string keyword)
         {
             List<TeacherData> searchedTeacherList = new List<TeacherData>();
-            foreach(var teacher in TeacherData.totalTeacherList)
+            foreach (var teacher in TeacherData.totalTeacherList)
             {
                 if (teacher.name.ToLower().Contains(keyword.ToLower()))
                 {
@@ -171,10 +188,26 @@ namespace WebCrawler_WinForm_
             return searchedTeacherList;
         }
 
+        public List<CourseData> SearchCourseName(string keyword, int maxResults)
+        {
+            List<CourseData> searchedCourseList = new List<CourseData>();
+            int i = 0;
+            foreach(var course in CourseData.courseDataList)
+            {
+                if (course.CourseName.ToLower().Contains(keyword.ToLower()))
+                {
+                    searchedCourseList.Add(course);
+                    i++;
+                    if (i >= maxResults) break;
+                }
+            }
+            return searchedCourseList;
+        }
+
         public List<CourseData> SearchCourseName(string keyword)
         {
             List<CourseData> searchedCourseList = new List<CourseData>();
-            foreach(var course in CourseData.courseDataList)
+            foreach (var course in CourseData.courseDataList)
             {
                 if (course.CourseName.ToLower().Contains(keyword.ToLower()))
                 {

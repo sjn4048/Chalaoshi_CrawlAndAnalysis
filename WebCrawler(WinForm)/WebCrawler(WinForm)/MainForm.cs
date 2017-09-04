@@ -59,6 +59,22 @@ namespace WebCrawler_WinForm_
 
         private void DbBox_Click(object sender, EventArgs e)
         {
+            if (TeacherData.totalTeacherList == null && CourseData.courseDataList == null)
+            {
+                MessageBox.Show("数据库可能已丢失或被篡改，请点击“更新数据”重新获取或联系作者", "数据库丢失");
+                return;
+            }
+            if (!isDataFinished && task.Status == TaskStatus.Running)
+            {
+                WaitForm waitForm = new WaitForm() { TopMost = true, StartPosition = FormStartPosition.CenterScreen };
+                waitForm.Show();
+                task.Wait();
+                waitForm.Close();
+            }
+            else if (!isDataFinished && task.Status == TaskStatus.RanToCompletion)
+            {
+                StartLoadingTask();
+            }
             new BillboardForm
             {
                 TopMost = true,

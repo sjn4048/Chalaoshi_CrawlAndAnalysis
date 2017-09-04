@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(UpdateFailedDueToTime));
             this.backgroundWorker1 = new System.ComponentModel.BackgroundWorker();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.label1 = new System.Windows.Forms.Label();
@@ -54,8 +55,8 @@
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(395, 161);
             this.label1.TabIndex = 0;
-            this.label1.Text = "抱歉，由于现在是选课期间，查老师服务器访问量较大。为防止查老师服务器崩溃，离线数据更新功能暂时关闭。您可以使用当前离线数据，或登录查老师网站直接搜索。本功能将于8" +
-    "月31日重新启用。";
+            this.label1.Text = "抱歉，由于现在是选课期间，查老师服务器访问量较大。为防止查老师服务器崩溃，离线数据更新功能暂时关闭。您可以使用当前离线数据，或登录查老师网站直接搜索。本功能将于选" +
+    "课结束后重新启用。";
             // 
             // UpdateFailedDueToTime
             // 
@@ -63,6 +64,7 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(437, 267);
             this.Controls.Add(this.groupBox1);
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "UpdateFailedDueToTime";
             this.Text = "提示";
             this.Load += new System.EventHandler(this.UpdateFailedDueToTime_Load);

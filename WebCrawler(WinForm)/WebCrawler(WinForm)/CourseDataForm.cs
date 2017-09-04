@@ -20,7 +20,6 @@ namespace WebCrawler_WinForm_
         public CourseDataForm(CourseData inputCourseData)
         {
             this.courseData = inputCourseData;
-            this.Text = courseData.CourseName.Replace("\"", "");
 
             InitializeComponent();
             groupBox1 = new GroupBox()
@@ -67,7 +66,7 @@ namespace WebCrawler_WinForm_
 
         private void ClassDataForm_Load(object sender, EventArgs e)
         {
-
+            this.Text = courseData.CourseName.Replace("\"", "");
         }
 
         private void DisplayResults(List<TeacherData> teacherList)
@@ -99,6 +98,14 @@ namespace WebCrawler_WinForm_
                 groupBox2.Controls.Clear();
                 DisplayResults(teacherList.OrderByDescending(m => m.score).ToList());
             };
+            scoreLabel1.MouseEnter += (s, arg) =>
+            {
+                scoreLabel1.BackColor = SystemColors.GradientInactiveCaption;
+            };
+            scoreLabel1.MouseLeave += (s, arg) =>
+            {
+                scoreLabel1.BackColor = SystemColors.Control;
+            };
             groupBox2.Controls.Add(scoreLabel1);
 
             var gpaLabel1 = new Label()
@@ -113,6 +120,14 @@ namespace WebCrawler_WinForm_
             {
                 groupBox2.Controls.Clear();
                 DisplayResults(teacherList.OrderByDescending(m => m.templateCourse.OverallGPAOfTeacher).ToList());
+            };
+            gpaLabel1.MouseEnter += (s, arg) =>
+            {
+                gpaLabel1.BackColor = SystemColors.GradientInactiveCaption;
+            };
+            gpaLabel1.MouseLeave += (s, arg) =>
+            {
+                gpaLabel1.BackColor = SystemColors.Control;
             };
             groupBox2.Controls.Add(gpaLabel1);
 
@@ -143,6 +158,14 @@ namespace WebCrawler_WinForm_
                         StartPosition = FormStartPosition.CenterScreen,
                     }
                     .Show();
+                };
+                teacherNameLabel.MouseEnter += (s, arg) =>
+                {
+                    teacherNameLabel.BackColor = SystemColors.GradientInactiveCaption;
+                };
+                teacherNameLabel.MouseLeave += (s, arg) =>
+                {
+                    teacherNameLabel.BackColor = SystemColors.Control;
                 };
                 groupBox2.Controls.Add(teacherNameLabel);
 

@@ -122,6 +122,14 @@ namespace WebCrawler_WinForm_
                     }
                     .Show();
                 };
+                nameLabel.MouseEnter += (s, arg) =>
+                {
+                    nameLabel.BackColor = SystemColors.GradientInactiveCaption;
+                };
+                nameLabel.MouseLeave += (s, arg) =>
+                {
+                    nameLabel.BackColor = SystemColors.Control;
+                };
                 groupBox1.Controls.Add(nameLabel);
 
                 var scoreLabel = new Label()

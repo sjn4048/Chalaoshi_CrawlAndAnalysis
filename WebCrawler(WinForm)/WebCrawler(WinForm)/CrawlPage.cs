@@ -16,6 +16,7 @@ namespace WebCrawler_WinForm_
 {
     public partial class CrawlPage : Form
     {
+        bool isCrawlerRunning = false;
         Task task;
         CancellationTokenSource tokenSource = new CancellationTokenSource();
 
@@ -49,9 +50,18 @@ namespace WebCrawler_WinForm_
                 return;
             }
             //以上为联网监测
-            WebCrawlerProcess crawler = new WebCrawlerProcess(this);
-            task = new Task(() => crawler.StartWebCrawler(), tokenSource.Token);
-            task.Start();
+            if (isCrawlerRunning == false)
+            {
+                isCrawlerRunning = true;
+                WebCrawlerProcess crawler = new WebCrawlerProcess(this);
+                task = new Task(() => crawler.StartWebCrawler(), tokenSource.Token);
+                task.Start();
+            }
+            else
+            {
+                MessageBox.Show("爬虫已经开始运行","无法开始任务");
+            }
+
         }
 
         private void CrawlPage_Load(object sender, EventArgs e)

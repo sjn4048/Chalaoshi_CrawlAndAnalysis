@@ -76,7 +76,7 @@ namespace WebCrawler_WinForm_
                 Location = new Point(400, 90),
                 AutoSize = true
             };
-            if (hotLabel.Text == "0")
+            if (teacherData.voteNum_int + teacherData.commentNum_int == 0)
             {
                 hotLabel.Text = "<10";
             }
@@ -167,6 +167,14 @@ namespace WebCrawler_WinForm_
                             .Show();
                         }
                     };
+                    thisCourseLabel.MouseEnter += (s, arg) =>
+                    {
+                        thisCourseLabel.BackColor = SystemColors.GradientInactiveCaption;
+                    };
+                    thisCourseLabel.MouseLeave += (s, arg) =>
+                    {
+                        thisCourseLabel.BackColor = SystemColors.Control;
+                    };
                     groupBox2.Controls.Add(thisCourseLabel);
                     var thisCourseGPALabel = new Label()
                     {
@@ -175,7 +183,7 @@ namespace WebCrawler_WinForm_
                         Location = new Point(400, 70 + i * step),
                         AutoSize = true
                     };
-                    if (selectedCourse.GPASampleSizeOfTeacher_int == 0 || selectedCourse.OverallGPAOfTeacher == 0)
+                    if (thisCourse.GPASampleSizeOfTeacher_int == 0 || thisCourse.OverallGPAOfTeacher == 0)
                     {
                         thisCourseGPALabel.ForeColor = Color.DarkGray;
                     }
@@ -218,6 +226,14 @@ namespace WebCrawler_WinForm_
                                 StartPosition = FormStartPosition.CenterScreen
                             }
                             .Show();
+                        };
+                        nameLabel2.MouseEnter += (s, arg) =>
+                        {
+                            nameLabel2.BackColor = SystemColors.GradientInactiveCaption;
+                        };
+                        nameLabel2.MouseLeave += (s, arg) =>
+                        {
+                            nameLabel2.BackColor = SystemColors.Control;
                         };
                         groupBox2.Controls.Add(nameLabel2);
                         thisCourseLabel.Text = thisCourseLabel.Text.Substring(0, 17);

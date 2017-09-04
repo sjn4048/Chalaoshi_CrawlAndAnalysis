@@ -20,6 +20,6 @@ Second stage function:(finished):
 
 A Windows application for data in http://chalaoshi.cn with search engine and auto analysis.
 
-Third stage function:(to be finished):
+Third stage function:(still working on):
 
 Provide fuzzy search (which is very weak in the latest version); Auto connection to http://jwbinfosys.zju.edu.cn/

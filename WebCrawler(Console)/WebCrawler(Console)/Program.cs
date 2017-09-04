@@ -135,7 +135,7 @@ namespace WebCrawler_Console_
             stopwatch.Stop();
             try
             {
-                Console.WriteLine("Finished Completely.\nTime Consume:{0}\nPage Number:{1}\nTime Per Page:{2} milliseconds.\nPress any key to continue.", stopwatch.Elapsed, TotalInfo.Count, stopwatch.ElapsedMilliseconds / TotalInfo.Count);
+                Console.WriteLine("Finished completely.\nTime Consumption:{0}\nPage Number:{1}\nTime Per Page:{2} milliseconds.\nPress any key to continue.", stopwatch.Elapsed, TotalInfo.Count, stopwatch.ElapsedMilliseconds / TotalInfo.Count);
             }
             catch
             {

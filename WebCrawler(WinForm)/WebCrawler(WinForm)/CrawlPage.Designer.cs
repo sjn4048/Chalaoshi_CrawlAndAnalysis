@@ -155,12 +155,12 @@
         #endregion
 
         private System.Windows.Forms.Button button1;
-        private System.Windows.Forms.Button button2;
         public System.Windows.Forms.ListBox FailLogBox;
         public System.Windows.Forms.ListBox UpdateProcessList;
         public System.Windows.Forms.Button FinishButton;
         public System.Windows.Forms.CheckBox checkBox1;
         public System.Windows.Forms.CheckBox checkBox2;
         public System.Windows.Forms.ProgressBar progressBar1;
+        public System.Windows.Forms.Button button2;
     }
 }

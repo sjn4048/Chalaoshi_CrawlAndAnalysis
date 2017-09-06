@@ -66,7 +66,7 @@ namespace WebCrawler_WinForm_
 
         private void CrawlPage_Load(object sender, EventArgs e)
         {
-            FinishButton.Hide();
+            FinishButton.Enabled = false;
             checkBox1.Checked = checkBox2.Checked = true;
             progressBar1.Maximum = Chalaoshi.MaximumTeacherPage;
         }
@@ -90,12 +90,19 @@ namespace WebCrawler_WinForm_
 
         private void button2_Click(object sender, EventArgs e)
         {
-            if (MessageBox.Show("爬虫正在运行中，停止任务将导致更新失败，是否确认？", "停止任务", MessageBoxButtons.YesNo) == DialogResult.Yes)
+            if (isCrawlerRunning)
             {
-                tokenSource.Cancel();
+                if(MessageBox.Show("爬虫正在运行中，停止任务将导致更新失败，是否确认？", "停止任务", MessageBoxButtons.YesNo) == DialogResult.Yes)
+                {
+                    tokenSource.Cancel();
+                    this.Close();
+                    MessageBox.Show("更新任务被手动停止", "更新失败");
+                }
             }
-            this.Close();
-            MessageBox.Show("更新任务被手动停止", "更新失败");
+            else
+            {
+                this.Close();
+            }
         }
     }
 }

@@ -41,6 +41,14 @@ namespace WebCrawler_WinForm_
         public string score_string;
         public double callNameRate_double;
         public string callNameRate_string;
+        public enum CallName_enum
+        {
+            No = 0,
+            Possible = 1,
+            Yes = 2,
+            Unknown = 3,
+        };
+        public CallName_enum callNameState;
         public int voteNum_int;
         public string voteNum_string;
         public int commentNum_int;
@@ -72,9 +80,17 @@ namespace WebCrawler_WinForm_
                     commentNum_string = Line[7],
                 };
                 thisTeacher.score = (thisTeacher.score_string == "N/A") ? 0 : double.Parse(thisTeacher.score_string);
-                thisTeacher.callNameRate_double = double.Parse(thisTeacher.callNameRate_string.Replace("%", ""));
+                thisTeacher.callNameRate_double = double.Parse(thisTeacher.callNameRate_string.Replace("%", "")) / 100.0;
                 thisTeacher.voteNum_int = (thisTeacher.voteNum_string == "<5") ? 0 : int.Parse(Line[6]);
                 thisTeacher.commentNum_int = (thisTeacher.commentNum_string == "<5") ? 0 : int.Parse(Line[7]);
+                if (thisTeacher.voteNum_int < 5)
+                    thisTeacher.callNameState = TeacherData.CallName_enum.Unknown;
+                else if (thisTeacher.callNameRate_double > 0.5)
+                    thisTeacher.callNameState = TeacherData.CallName_enum.Yes;
+                else if (thisTeacher.callNameRate_double > 0.2)
+                    thisTeacher.callNameState = TeacherData.CallName_enum.Possible;
+                else
+                    thisTeacher.callNameState = TeacherData.CallName_enum.No;
 
                 var hisCourseList = new List<CourseData>();
 

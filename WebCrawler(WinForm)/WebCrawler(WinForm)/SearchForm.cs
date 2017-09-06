@@ -108,9 +108,21 @@ namespace WebCrawler_WinForm_
                 {
                     Text = "点名率",
                     Font = new Font("微软雅黑", 11, FontStyle.Underline),
-                    Location = new Point(xStart + 220, yStart - 50),
+                    Location = new Point(xStart + 350, yStart - 50),
                     AutoSize = true,
                     TextAlign = ContentAlignment.MiddleCenter
+                };
+                callNameRateLabel1.Click += (s, arg) =>
+                {
+                    DisplayResults(searchedTeacherList.OrderBy(m => m.callNameState).ToList(), searchedCourseList);
+                };
+                callNameRateLabel1.MouseEnter += (s, arg) =>
+                {
+                    callNameRateLabel1.BackColor = SystemColors.GradientInactiveCaption;
+                };
+                callNameRateLabel1.MouseLeave += (s, arg) =>
+                {
+                    callNameRateLabel1.BackColor = SystemColors.Control;
                 };
                 groupBox1.Controls.Add(callNameRateLabel1);
 
@@ -118,7 +130,7 @@ namespace WebCrawler_WinForm_
                 {
                     Text = "评分",
                     Font = new Font("微软雅黑", 11, FontStyle.Underline),
-                    Location = new Point(xStart + 350, yStart - 50),
+                    Location = new Point(xStart + 220, yStart - 50),
                     AutoSize = true,
                     TextAlign = ContentAlignment.MiddleCenter,
                 };
@@ -202,20 +214,20 @@ namespace WebCrawler_WinForm_
                 {
                     Text = thisTeacher.callNameRate_string,
                     Font = new Font("微软雅黑", 11, FontStyle.Regular),
-                    Location = new Point(xStart + 220, yStart + i * step),
+                    Location = new Point(xStart + 350, yStart + i * step),
                     AutoSize = true,
                     TextAlign = ContentAlignment.MiddleCenter
                 };
-                if (thisTeacher.voteNum_int == 0)
+                if (thisTeacher.callNameState == TeacherData.CallName_enum.Unknown)
                 {
                     callNameRateLabel.Text = "N/A";
                     callNameRateLabel.ForeColor = Color.DarkGray;
                 }
-                else if (thisTeacher.callNameRate_double > 50)
+                else if (thisTeacher.callNameState == TeacherData.CallName_enum.Yes)
                 {
                     callNameRateLabel.ForeColor = Color.Maroon;
                 }
-                else if (thisTeacher.callNameRate_double > 30)
+                else if (thisTeacher.callNameState == TeacherData.CallName_enum.Possible)
                 {
                     callNameRateLabel.ForeColor = Color.Goldenrod;
                 }
@@ -227,7 +239,7 @@ namespace WebCrawler_WinForm_
 
                 var scoreLabel = new Label()
                 {
-                    Location = new Point(xStart + 350, yStart + i * step),
+                    Location = new Point(xStart + 220, yStart + i * step),
                     Text = thisTeacher.score_string,
                     Font = new Font("微软雅黑", 12),
                     AutoSize = true,

@@ -127,6 +127,12 @@
     <Compile Include="CrawlShouldKnow.Designer.cs">
       <DependentUpon>CrawlShouldKnow.cs</DependentUpon>
     </Compile>
+    <Compile Include="FindIdeal.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FindIdeal.Designer.cs">
+      <DependentUpon>FindIdeal.cs</DependentUpon>
+    </Compile>
     <Compile Include="MainForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -145,6 +151,12 @@
     </Compile>
     <Compile Include="SearchForm.Designer.cs">
       <DependentUpon>SearchForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="SetConfigForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="SetConfigForm.Designer.cs">
+      <DependentUpon>SetConfigForm.cs</DependentUpon>
     </Compile>
     <Compile Include="SettingForm.cs">
       <SubType>Form</SubType>
@@ -185,6 +197,9 @@
     <EmbeddedResource Include="CrawlShouldKnow.resx">
       <DependentUpon>CrawlShouldKnow.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="FindIdeal.resx">
+      <DependentUpon>FindIdeal.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="MainForm.resx">
       <DependentUpon>MainForm.cs</DependentUpon>
     </EmbeddedResource>
@@ -195,6 +210,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="SearchForm.resx">
       <DependentUpon>SearchForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="SetConfigForm.resx">
+      <DependentUpon>SetConfigForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="SettingForm.resx">
       <DependentUpon>SettingForm.cs</DependentUpon>

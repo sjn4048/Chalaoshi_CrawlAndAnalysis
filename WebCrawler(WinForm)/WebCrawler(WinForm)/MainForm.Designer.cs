@@ -39,6 +39,7 @@
             this.CrawlBox = new System.Windows.Forms.PictureBox();
             this.SearchBox = new System.Windows.Forms.PictureBox();
             this.DbBox = new System.Windows.Forms.PictureBox();
+            this.label2 = new System.Windows.Forms.Label();
             this.statusStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.SettingBox)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.CrawlBox)).BeginInit();
@@ -160,11 +161,23 @@
             this.DbBox.TabStop = false;
             this.DbBox.Click += new System.EventHandler(this.DbBox_Click);
             // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.ForeColor = System.Drawing.SystemColors.ControlText;
+            this.label2.Location = new System.Drawing.Point(295, 45);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(90, 15);
+            this.label2.TabIndex = 7;
+            this.label2.Text = "新功能入口1";
+            this.label2.Click += new System.EventHandler(this.label2_Click);
+            // 
             // MainForm
             // 
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
             this.BackColor = System.Drawing.Color.White;
             this.ClientSize = new System.Drawing.Size(666, 639);
+            this.Controls.Add(this.label2);
             this.Controls.Add(this.statusStrip1);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.UpdateLabel);
@@ -203,6 +216,7 @@
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.StatusStrip statusStrip1;
         private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel1;
+        private System.Windows.Forms.Label label2;
     }
 }
 

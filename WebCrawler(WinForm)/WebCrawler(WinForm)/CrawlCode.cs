@@ -118,7 +118,8 @@ namespace WebCrawler_WinForm_
                     crawlPage.UpdateProcessList.Items.Add("当前已爬网页数量为0");
                 }
             }
-            crawlPage.FinishButton.Show();
+            crawlPage.FinishButton.Enabled = true;
+            crawlPage.button2.Enabled = false;
         }
 
         void crawler_ProcessPageCrawlStarting(object sender, PageCrawlStartingArgs e)

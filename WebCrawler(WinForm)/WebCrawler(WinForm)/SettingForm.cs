@@ -29,9 +29,44 @@ namespace WebCrawler_WinForm_
 
         }
 
-        private void button2_Click(object sender, EventArgs e)
+        private void button3_Click(object sender, EventArgs e)
         {
-            MessageBox.Show("说明文档正在制作中，请耐心等待", "Oops...");
+            MessageBox.Show("此处预留给更多属性设置，这些设置将在下个版本上线", "预留位置");
+        }
+
+        private void button2_Click_1(object sender, EventArgs e)
+        {
+            MessageBox.Show("说明文档正在制作中，将在下个版本上线", "Oops...");
+        }
+
+        private void button1_MouseEnter(object sender, EventArgs e)
+        {
+            button1.BackColor = SystemColors.ActiveCaption;
+        }
+
+        private void button1_MouseLeave(object sender, EventArgs e)
+        {
+            button1.BackColor = SystemColors.Control;
+        }
+
+        private void button2_MouseEnter(object sender, EventArgs e)
+        {
+            button2.BackColor = SystemColors.ActiveCaption;
+        }
+
+        private void button2_MouseLeave(object sender, EventArgs e)
+        {
+            button2.BackColor = SystemColors.Control;
+        }
+
+        private void button3_MouseEnter(object sender, EventArgs e)
+        {
+            button3.BackColor = SystemColors.ActiveCaption;
+        }
+
+        private void button3_MouseLeave(object sender, EventArgs e)
+        {
+            button3.BackColor = SystemColors.Control;
         }
     }
 }

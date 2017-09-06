@@ -159,5 +159,15 @@ namespace WebCrawler_WinForm_
             });
             task.Start();
         }
+
+        private void label2_Click(object sender, EventArgs e)
+        {
+            new FindIdeal()
+            {
+                TopMost = true,
+                StartPosition = FormStartPosition.CenterScreen,
+            }
+            .Show();
+        }
     }
 }

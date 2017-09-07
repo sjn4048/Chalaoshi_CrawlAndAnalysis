@@ -85,11 +85,11 @@ namespace WebCrawler_WinForm_
 
             if (LeftIDList.Count > 0 && File.Exists("CLSDatabase.csv"))
             {
-                foreach (var leftLink in LeftIDList)
+                foreach (var leftID in LeftIDList)
                 {
                     if (crawlPage.checkBox2.Checked == true)
                     {
-                        crawlPage.FailLogBox.Items.Add($"{leftLink}：未写入");
+                        crawlPage.FailLogBox.Items.Add($"{leftID}：未写入");
                     }
                 }
             }
@@ -255,25 +255,28 @@ namespace WebCrawler_WinForm_
                 return;
             }
 
-            if (!TotalInfo.Contains(Info) && !string.IsNullOrEmpty(Uri))
+            lock (LeftIDList)
             {
-                TotalInfo.Add(Info);
-                LeftIDList.Remove(int.Parse(ID));
-                if (crawlPage.progressBar1.Value < crawlPage.progressBar1.Maximum)
+                if (!TotalInfo.Contains(Info) && !string.IsNullOrEmpty(Uri))
                 {
-                    crawlPage.progressBar1.Value += crawlPage.progressBar1.Step;
-                }
-                if (crawlPage.checkBox1.Checked == true)
-                {
-                    crawlPage.UpdateProcessList.Items.Add("finish:" + crawledPage.Uri.AbsoluteUri);
-                    crawlPage.UpdateProcessList.TopIndex = crawlPage.UpdateProcessList.Items.Count - 1;
-                }
-            }
-            else if (TotalInfo.Contains(Info))
-            {
-                if (crawlPage.checkBox2.Checked == true)
-                {
+                    TotalInfo.Add(Info);
                     LeftIDList.Remove(int.Parse(ID));
+                    if (crawlPage.progressBar1.Value < crawlPage.progressBar1.Maximum)
+                    {
+                        crawlPage.progressBar1.Value += crawlPage.progressBar1.Step;
+                    }
+                    if (crawlPage.checkBox1.Checked == true)
+                    {
+                        crawlPage.UpdateProcessList.Items.Add("finish:" + crawledPage.Uri.AbsoluteUri);
+                        crawlPage.UpdateProcessList.TopIndex = crawlPage.UpdateProcessList.Items.Count - 1;
+                    }
+                }
+                else if (TotalInfo.Contains(Info))
+                {
+                    if (crawlPage.checkBox2.Checked == true)
+                    {
+                        LeftIDList.Remove(int.Parse(ID));
+                    }
                 }
             }
         }

@@ -39,7 +39,7 @@ namespace WebCrawler_WinForm_
 
         private void checkBox1_CheckedChanged(object sender, EventArgs e)
         {
-
+            button1.Enabled = (checkBox1.Checked) ? true : false;
         }
 
         private void label1_Click(object sender, EventArgs e)
@@ -49,7 +49,7 @@ namespace WebCrawler_WinForm_
 
         private void CrawlShouldKnow_Load(object sender, EventArgs e)
         {
-
+            button1.Enabled = false;
         }
     }
 }

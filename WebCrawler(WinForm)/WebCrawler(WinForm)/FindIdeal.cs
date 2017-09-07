@@ -42,9 +42,13 @@ namespace WebCrawler_WinForm_
         private void FindIdeal_Load(object sender, EventArgs e)
         {
             thisPanel = startPanel;
-            coursePanel.Hide();
+            DrawTeacherPanel();
+            DrawCoursePanel();
+        }
+
+        private void DrawTeacherPanel()
+        {
             teacherPanel.Hide();
-            this.Controls.Add(coursePanel);
             this.Controls.Add(teacherPanel);
 
             pictureBox1.Click += (s, arg) =>
@@ -63,6 +67,12 @@ namespace WebCrawler_WinForm_
                 pictureBox1.BackColor = SystemColors.Control;
                 findTeacherLabel.BackColor = SystemColors.Control;
             };
+            findTeacherLabel.Click += (s, arg) =>
+            {
+                startPanel.Hide();
+                teacherPanel.Show();
+                thisPanel = teacherPanel;
+            };
             findTeacherLabel.MouseEnter += (s, arg) =>
             {
                 pictureBox1.BackColor = SystemColors.GradientActiveCaption;
@@ -73,6 +83,39 @@ namespace WebCrawler_WinForm_
                 pictureBox1.BackColor = SystemColors.Control;
                 findTeacherLabel.BackColor = SystemColors.Control;
             };
+
+            var teacherSearchLabel = new Label()
+            {
+                Text = "请选择筛选条件",
+                Font = new Font("微软雅黑", 11, FontStyle.Regular),
+                Location = new Point(30, 60),
+                AutoSize = true,
+                TextAlign = ContentAlignment.MiddleCenter
+            };
+            teacherPanel.Controls.Add(teacherSearchLabel);
+
+            var teacherReturnLabel = new Label()
+            {
+                Text = "返回上一级",
+                Font = new Font("微软雅黑", 11, FontStyle.Regular),
+                Location = new Point(25, 15),
+                AutoSize = true,
+                BorderStyle = BorderStyle.FixedSingle,
+            };
+            teacherReturnLabel.Click += (s, arg) =>
+            {
+                thisPanel.Hide();
+                startPanel.Show();
+                thisPanel = startPanel;
+            };
+            teacherPanel.Controls.Add(teacherReturnLabel);
+        }
+
+        private void DrawCoursePanel()
+        {
+            coursePanel.Hide();
+            this.Controls.Add(coursePanel);
+
             pictureBox2.Click += (s, arg) =>
             {
                 startPanel.Hide();
@@ -89,6 +132,12 @@ namespace WebCrawler_WinForm_
                 pictureBox2.BackColor = SystemColors.Control;
                 findCourseLabel.BackColor = SystemColors.Control;
             };
+            findCourseLabel.Click += (s, arg) =>
+            {
+                startPanel.Hide();
+                coursePanel.Show();
+                thisPanel = coursePanel;
+            };
             findCourseLabel.MouseEnter += (s, arg) =>
             {
                 pictureBox2.BackColor = SystemColors.GradientActiveCaption;
@@ -100,7 +149,7 @@ namespace WebCrawler_WinForm_
                 findCourseLabel.BackColor = SystemColors.Control;
             };
 
-            var label1 = new Label()
+            var courseSearchLabel = new Label()
             {
                 Text = "请选择筛选条件",
                 Font = new Font("微软雅黑", 11, FontStyle.Regular),
@@ -108,25 +157,23 @@ namespace WebCrawler_WinForm_
                 AutoSize = true,
                 TextAlign = ContentAlignment.MiddleCenter
             };
-            coursePanel.Controls.Add(label1);
-            teacherPanel.Controls.Add(label1);
+            coursePanel.Controls.Add(courseSearchLabel);
 
-            var returnLabel = new Label()
+            var courseReturnLabel = new Label()
             {
                 Text = "返回上一级",
                 Font = new Font("微软雅黑", 11, FontStyle.Regular),
-                Location = new Point(25,15),
+                Location = new Point(25, 15),
                 AutoSize = true,
                 BorderStyle = BorderStyle.FixedSingle,
             };
-            returnLabel.Click += (s, arg) =>
+            courseReturnLabel.Click += (s, arg) =>
             {
                 thisPanel.Hide();
                 startPanel.Show();
                 thisPanel = startPanel;
             };
-            coursePanel.Controls.Add(returnLabel);
-            teacherPanel.Controls.Add(returnLabel);
+            coursePanel.Controls.Add(courseReturnLabel);
         }
     }
 }

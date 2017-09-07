@@ -266,7 +266,6 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="icon.ico" />
     <Content Include="Search2.ico" />
     <Content Include="teacher.ico" />
   </ItemGroup>

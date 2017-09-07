@@ -78,7 +78,7 @@ namespace WebCrawler_WinForm_
             };
             if (teacherData.voteNum_int + teacherData.commentNum_int == 0)
             {
-                hotLabel.Text = "<10";
+                hotLabel.Text = "热度：<10";
             }
             groupBox1.Controls.Add(hotLabel);
 

@@ -79,9 +79,9 @@ namespace WebCrawler_WinForm_
                 });
                 //Thread.Sleep();
             }
-            
-            #endregion
 
+            #endregion
+            CrawlPage.isCrawlerRunning = false;
 
             if (LeftIDList.Count > 0 && File.Exists("CLSDatabase.csv"))
             {

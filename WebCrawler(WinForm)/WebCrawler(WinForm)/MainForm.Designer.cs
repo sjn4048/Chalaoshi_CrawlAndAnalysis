@@ -64,7 +64,7 @@
             this.SearchLabel.AutoSize = true;
             this.SearchLabel.Font = new System.Drawing.Font("微软雅黑", 16.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.SearchLabel.ForeColor = System.Drawing.SystemColors.InfoText;
-            this.SearchLabel.Location = new System.Drawing.Point(122, 236);
+            this.SearchLabel.Location = new System.Drawing.Point(131, 236);
             this.SearchLabel.Name = "SearchLabel";
             this.SearchLabel.Size = new System.Drawing.Size(127, 36);
             this.SearchLabel.TabIndex = 5;
@@ -76,7 +76,7 @@
             this.UpdateLabel.AutoSize = true;
             this.UpdateLabel.Font = new System.Drawing.Font("微软雅黑", 16.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.UpdateLabel.ForeColor = System.Drawing.SystemColors.InfoText;
-            this.UpdateLabel.Location = new System.Drawing.Point(126, 510);
+            this.UpdateLabel.Location = new System.Drawing.Point(131, 510);
             this.UpdateLabel.Name = "UpdateLabel";
             this.UpdateLabel.Size = new System.Drawing.Size(127, 36);
             this.UpdateLabel.TabIndex = 5;
@@ -174,7 +174,8 @@
             // 
             // MainForm
             // 
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
+            this.AutoScaleDimensions = new System.Drawing.SizeF(120F, 120F);
+            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
             this.BackColor = System.Drawing.Color.White;
             this.ClientSize = new System.Drawing.Size(666, 639);
             this.Controls.Add(this.label2);
@@ -193,6 +194,7 @@
             this.MaximizeBox = false;
             this.Name = "MainForm";
             this.Text = "选课助手";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.MainForm_FormClosing);
             this.Load += new System.EventHandler(this.MainForm_Load);
             this.statusStrip1.ResumeLayout(false);
             this.statusStrip1.PerformLayout();

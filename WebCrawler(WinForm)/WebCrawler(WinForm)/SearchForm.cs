@@ -15,6 +15,7 @@ namespace WebCrawler_WinForm_
     {
         GroupBox groupBox1;
         GroupBox groupBox2;
+        int maxItemsPerPage = 30;
 
         public SearchForm()
         {
@@ -74,11 +75,13 @@ namespace WebCrawler_WinForm_
             var yStart = groupBox1.Location.Y + 20;
             var step = 45;
 
-            this.Size = new Size(760,530);
+            //this.Size = new Size(760,530);
             groupBox1.Controls.Clear();
             groupBox2.Controls.Clear();
             groupBox1.Size = new Size(640, 100);
+            groupBox1.Location = new Point(50, 80);
             groupBox2.Size = new Size(640, 100);
+            groupBox2.Location = new Point(50, 260);
             
             if (searchedTeacherList.Count == 0)
             {
@@ -304,7 +307,7 @@ namespace WebCrawler_WinForm_
                 }
                 groupBox1.Controls.Add(hotLabel);
                 i++;
-                if (i >= 50) break;
+                if (i >= maxItemsPerPage) break;
             }
 
             groupBox2.Location = new Point(50, 240 + i * step);
@@ -513,7 +516,7 @@ namespace WebCrawler_WinForm_
                         nameLabel.Text = nameLabel.Text.Substring(0, 15);
                         j++;
                     }
-                    if (j >= 50) break;
+                    if (j >= maxItemsPerPage) break;
                 }
             }
             var emptyLabel = new Label()
@@ -523,16 +526,6 @@ namespace WebCrawler_WinForm_
                 AutoSize = true
             };
             this.Controls.Add(emptyLabel);
-        }
-
-        private void ScoreLabel1_Click(object sender, EventArgs e)
-        {
-            throw new NotImplementedException();
-        }
-
-        private void CallNameRateLabel1_Click(object sender, EventArgs e)
-        {
-            throw new NotImplementedException();
         }
     }
 }

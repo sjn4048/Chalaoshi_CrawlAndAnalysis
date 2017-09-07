@@ -16,7 +16,7 @@ namespace WebCrawler_WinForm_
 {
     public partial class CrawlPage : Form
     {
-        bool isCrawlerRunning = false;
+        public static bool isCrawlerRunning = false;
         Task task;
         CancellationTokenSource tokenSource = new CancellationTokenSource();
 
@@ -85,7 +85,24 @@ namespace WebCrawler_WinForm_
 
         private void CrawlPage_FormClosing(object sender, FormClosingEventArgs e)
         {
-            this.Controls.Clear();
+            if (isCrawlerRunning)
+            {
+                if (MessageBox.Show("爬虫正在运行中，停止任务将导致更新失败，是否确认？", "停止任务", MessageBoxButtons.YesNo) == DialogResult.Yes)
+                {
+                    tokenSource.Cancel();
+                    isCrawlerRunning = false;
+                    this.Controls.Clear();
+                    MessageBox.Show("更新任务被手动停止", "更新失败");
+                }
+                else
+                {
+                    e.Cancel = true;
+                }
+            }
+            else
+            {
+                this.Controls.Clear();
+            }
         }
 
         private void button2_Click(object sender, EventArgs e)
@@ -95,6 +112,7 @@ namespace WebCrawler_WinForm_
                 if(MessageBox.Show("爬虫正在运行中，停止任务将导致更新失败，是否确认？", "停止任务", MessageBoxButtons.YesNo) == DialogResult.Yes)
                 {
                     tokenSource.Cancel();
+                    isCrawlerRunning = false;
                     this.Close();
                     MessageBox.Show("更新任务被手动停止", "更新失败");
                 }

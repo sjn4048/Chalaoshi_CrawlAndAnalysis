@@ -49,7 +49,7 @@ namespace WebCrawler_WinForm_
 
         private void MainForm_Load(object sender, EventArgs e)
         {
-
+            label2.Hide();
         }
 
         private void UpdateLabel_Click(object sender, EventArgs e)
@@ -168,6 +168,22 @@ namespace WebCrawler_WinForm_
                 StartPosition = FormStartPosition.CenterScreen,
             }
             .Show();
+        }
+
+        private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            if (CrawlPage.isCrawlerRunning)
+            {
+                if (MessageBox.Show("检测到正在更新离线数据，若关闭主程序，更新将中止。是否确认退出？", "更新将被中止", MessageBoxButtons.YesNoCancel) == DialogResult.Yes)
+                {
+                    Dispose();
+                    Application.Exit();
+                }
+                else
+                {
+                    e.Cancel = true;
+                }
+            }
         }
     }
 }

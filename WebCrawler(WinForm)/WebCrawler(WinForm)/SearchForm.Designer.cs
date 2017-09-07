@@ -37,7 +37,7 @@
             // textBox1
             // 
             this.textBox1.Font = new System.Drawing.Font("微软雅黑", 10.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.textBox1.Location = new System.Drawing.Point(223, 21);
+            this.textBox1.Location = new System.Drawing.Point(244, 21);
             this.textBox1.Name = "textBox1";
             this.textBox1.Size = new System.Drawing.Size(148, 31);
             this.textBox1.TabIndex = 0;
@@ -56,7 +56,7 @@
             // button1
             // 
             this.button1.Font = new System.Drawing.Font("微软雅黑", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.button1.Location = new System.Drawing.Point(377, 20);
+            this.button1.Location = new System.Drawing.Point(408, 20);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(94, 33);
             this.button1.TabIndex = 3;

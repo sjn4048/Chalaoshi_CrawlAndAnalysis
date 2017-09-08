@@ -32,7 +32,7 @@ namespace WebCrawler_WinForm_
 
         public void StillUnderConstruction()
         {
-            MessageBox.Show("这个功能正在紧张施工中，要不先试试别的用能~?");
+            MessageBox.Show("这个功能正在紧张施工中，要不先试试别的功能~?");
         }
 
         private void 关于本软件AToolStripMenuItem_Click(object sender, EventArgs e)
@@ -49,7 +49,7 @@ namespace WebCrawler_WinForm_
 
         private void MainForm_Load(object sender, EventArgs e)
         {
-            label2.Hide();
+
         }
 
         private void UpdateLabel_Click(object sender, EventArgs e)

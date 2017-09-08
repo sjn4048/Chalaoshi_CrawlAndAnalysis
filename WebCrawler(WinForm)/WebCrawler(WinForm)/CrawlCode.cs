@@ -77,7 +77,6 @@ namespace WebCrawler_WinForm_
                         }
                     }
                 });
-                //Thread.Sleep();
             }
 
             #endregion

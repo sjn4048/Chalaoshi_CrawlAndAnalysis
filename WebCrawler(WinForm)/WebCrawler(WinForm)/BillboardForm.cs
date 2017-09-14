@@ -46,7 +46,7 @@ namespace WebCrawler_WinForm_
                     teacherList = teacherList.OrderBy(y => y.score).ToList();
                     break;
                 case 2:
-                    teacherList = TeacherData.totalTeacherList.OrderByDescending(x => x.commentNum_int + x.voteNum_int).ToList();
+                    teacherList = TeacherData.totalTeacherList.OrderByDescending(x => x.commentNum + x.voteNum).ToList();
                     break;
                 case 3:
                     teacherList = TeacherData.totalTeacherList.OrderByDescending(x => x.courseList.Count).ToList();
@@ -135,7 +135,7 @@ namespace WebCrawler_WinForm_
                 var scoreLabel = new Label()
                 {
                     Location = new Point(200, 70 + i * step),
-                    Text = thisTeacher.score_string,
+                    Text = thisTeacher.ToString("Score"),
                     Font = new Font("微软雅黑", 13),
                     AutoSize = true,
                     TextAlign = ContentAlignment.MiddleCenter
@@ -182,7 +182,7 @@ namespace WebCrawler_WinForm_
                 {
                     courseNumLabel.ForeColor = Color.Green;
                 }
-                else if (thisTeacher.commentNum_int + thisTeacher.voteNum_int > 0)
+                else if (thisTeacher.courseList.Count > 0)
                 {
                     courseNumLabel.ForeColor = Color.IndianRed;
                 }
@@ -195,29 +195,25 @@ namespace WebCrawler_WinForm_
 
                 var hotLabel = new Label()
                 {
-                    Text = (thisTeacher.commentNum_int + thisTeacher.voteNum_int).ToString(),
+                    Text = thisTeacher.ToString("HotNum"),
                     Font = new Font("微软雅黑", 11, FontStyle.Regular),
                     Location = new Point(450, 70 + i * step),
                     AutoSize = true,
                     TextAlign = ContentAlignment.MiddleCenter
                 };
-                if (hotLabel.Text == "0")
-                {
-                    hotLabel.Text = "<10";
-                }
-                if (thisTeacher.commentNum_int + thisTeacher.voteNum_int > 499)
+                if (thisTeacher.commentNum + thisTeacher.voteNum > 499)
                 {
                     hotLabel.ForeColor = Color.Green;
                 }
-                else if (thisTeacher.commentNum_int + thisTeacher.voteNum_int > 199)
+                else if (thisTeacher.commentNum + thisTeacher.voteNum > 199)
                 {
                     hotLabel.ForeColor = Color.Blue;
                 }
-                else if (thisTeacher.commentNum_int + thisTeacher.voteNum_int > 69)
+                else if (thisTeacher.commentNum + thisTeacher.voteNum > 69)
                 {
                     hotLabel.ForeColor = Color.Goldenrod;
                 }
-                else if (thisTeacher.commentNum_int + thisTeacher.voteNum_int > 19)
+                else if (thisTeacher.commentNum + thisTeacher.voteNum > 19)
                 {
                     hotLabel.ForeColor = Color.IndianRed;
                 }

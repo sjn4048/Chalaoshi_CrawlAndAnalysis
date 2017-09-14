@@ -109,6 +109,34 @@ namespace WebCrawler_WinForm_
                 thisPanel = startPanel;
             };
             teacherPanel.Controls.Add(teacherReturnLabel);
+
+            var scoreLabel = new Label()
+            {
+                Text = "评分高于：",
+                Font = new Font("微软雅黑", 11, FontStyle.Regular),
+                Location = new Point(30, 120),
+                AutoSize = true,
+                TextAlign = ContentAlignment.MiddleCenter
+            };
+            teacherPanel.Controls.Add(scoreLabel);
+
+            var scoreTextbox = new TextBox()
+            {
+                Text = "请输入分数",
+                Font = new Font("微软雅黑", 11, FontStyle.Regular),
+                Location = new Point(140, 120),
+                AutoSize = true,
+            };
+            teacherPanel.Controls.Add(scoreTextbox);
+
+            var gpaLabel = new Label()
+            {
+                Text = "绩点高于：",
+                Font = new Font("微软雅黑", 11, FontStyle.Regular),
+                Location = new Point(30, 120),
+                AutoSize = true,
+                TextAlign = ContentAlignment.MiddleCenter
+            };
         }
 
         private void DrawCoursePanel()

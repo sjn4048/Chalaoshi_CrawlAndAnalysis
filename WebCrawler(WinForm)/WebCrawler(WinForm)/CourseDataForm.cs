@@ -172,11 +172,11 @@ namespace WebCrawler_WinForm_
                 var scoreLabel = new Label()
                 {
                     Location = new Point(250, 80 + i * step),
-                    Text = teacher.score_string,
+                    Text = teacher.ToString("Score"),
                     Font = new Font("微软雅黑", 13),
                     AutoSize = true,
                 };
-                if (teacher.score == 0)
+                if (!teacher.hasEnoughData)
                 {
                     scoreLabel.ForeColor = Color.DarkGray;
                 }

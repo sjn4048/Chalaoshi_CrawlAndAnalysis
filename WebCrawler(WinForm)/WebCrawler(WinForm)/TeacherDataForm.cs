@@ -33,7 +33,8 @@ namespace WebCrawler_WinForm_
 
         private void ListAllItems()
         {
-            this.Text = $"{teacherData.name}, 分数：{teacherData.score_string}";
+            var score_string = teacherData.ToString("Score");
+            this.Text = $"{teacherData.name}, 分数：{score_string}";
             var groupBox1 = new GroupBox()
             {
                 Text = string.Empty,
@@ -63,28 +64,25 @@ namespace WebCrawler_WinForm_
 
             var scoreLabel = new Label()
             {
-                Text = $"分数：{teacherData.score_string}",
+                Text = $"分数：{teacherData.ToString("Score")}",
                 Font = new Font("微软雅黑", 11, FontStyle.Regular),
                 Location = new Point(35, 120),
                 AutoSize = true
             };
+
             groupBox1.Controls.Add(scoreLabel);
             var hotLabel = new Label()
             {
-                Text = $"热度：{teacherData.voteNum_int + teacherData.commentNum_int}",
+                Text = $"热度：{teacherData.ToString("HotNum")}",
                 Font = new Font("微软雅黑", 11, FontStyle.Regular),
                 Location = new Point(400, 90),
                 AutoSize = true
             };
-            if (teacherData.voteNum_int + teacherData.commentNum_int == 0)
-            {
-                hotLabel.Text = "热度：<10";
-            }
             groupBox1.Controls.Add(hotLabel);
 
             var callNameRateLabel = new Label()
             {
-                Text = $"点名率：{teacherData.callNameRate_string}",
+                Text = $"点名率：{teacherData.ToString("CallNameRate")}",
                 Font = new Font("微软雅黑", 11, FontStyle.Regular),
                 Location = new Point(35, 150),
                 AutoSize = true

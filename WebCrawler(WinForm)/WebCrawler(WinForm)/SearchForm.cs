@@ -15,6 +15,9 @@ namespace WebCrawler_WinForm_
     {
         GroupBox groupBox1;
         GroupBox groupBox2;
+
+        bool hasDisplayed = false;
+        bool showUnrated = true;
         int maxItemsPerPage = 30;
 
         public SearchForm()
@@ -54,8 +57,8 @@ namespace WebCrawler_WinForm_
             else
             {
                 var search = new SearchAlgorithm();
-                var searchedTeacherList = search.SearchTeacherName(keyword);
-                var searchedCourseList = search.SearchCourseName(keyword);
+                var searchedTeacherList = search.SearchTeacherName(keyword, maxItemsPerPage, showUnrated);
+                var searchedCourseList = search.SearchCourseName(keyword, maxItemsPerPage, showUnrated);
                 DisplayResults(searchedTeacherList, searchedCourseList);
             }
 
@@ -75,6 +78,7 @@ namespace WebCrawler_WinForm_
             var yStart = groupBox1.Location.Y + 20;
             var step = 45;
 
+            hasDisplayed = true;
             //this.Size = new Size(760,530);
             groupBox1.Controls.Clear();
             groupBox2.Controls.Clear();
@@ -170,7 +174,7 @@ namespace WebCrawler_WinForm_
                 };
                 commentNumLabel1.Click += (s, arg) =>
                 {
-                    DisplayResults(searchedTeacherList.OrderByDescending(m => m.commentNum_int + m.voteNum_int).ToList(), searchedCourseList);
+                    DisplayResults(searchedTeacherList.OrderByDescending(m => m.commentNum + m.voteNum).ToList(), searchedCourseList);
                 };
                 commentNumLabel1.MouseEnter += (s, arg) =>
                 {
@@ -215,7 +219,7 @@ namespace WebCrawler_WinForm_
 
                 var callNameRateLabel = new Label()
                 {
-                    Text = thisTeacher.callNameRate_string,
+                    Text = thisTeacher.ToString("CallNameRate"),
                     Font = new Font("微软雅黑", 11, FontStyle.Regular),
                     Location = new Point(xStart + 350, yStart + i * step),
                     AutoSize = true,
@@ -243,11 +247,12 @@ namespace WebCrawler_WinForm_
                 var scoreLabel = new Label()
                 {
                     Location = new Point(xStart + 220, yStart + i * step),
-                    Text = thisTeacher.score_string,
+                    Text = thisTeacher.ToString("Score"),
                     Font = new Font("微软雅黑", 12),
                     AutoSize = true,
                 };
-                if (thisTeacher.score == 0)
+
+                if (!thisTeacher.hasEnoughData)
                 {
                     scoreLabel.ForeColor = Color.DarkGray;
                 }
@@ -276,23 +281,23 @@ namespace WebCrawler_WinForm_
                 var hotLabel = new Label()
                 {
                     Location = new Point(xStart + 480, yStart + i * step),
-                    Text = (thisTeacher.commentNum_int + thisTeacher.voteNum_int).ToString(),
+                    Text = (thisTeacher.commentNum + thisTeacher.voteNum).ToString(),
                     Font = new Font("微软雅黑", 12),
                     AutoSize = true,
                 };
-                if (thisTeacher.commentNum_int + thisTeacher.voteNum_int > 999)
+                if (thisTeacher.commentNum + thisTeacher.voteNum > 999)
                 {
                     hotLabel.ForeColor = Color.Green;
                 }
-                else if (thisTeacher.commentNum_int + thisTeacher.voteNum_int > 299)
+                else if (thisTeacher.commentNum + thisTeacher.voteNum > 299)
                 {
                     hotLabel.ForeColor = Color.Blue;
                 }
-                else if (thisTeacher.commentNum_int + thisTeacher.voteNum_int > 99)
+                else if (thisTeacher.commentNum + thisTeacher.voteNum > 99)
                 {
                     hotLabel.ForeColor = Color.Goldenrod;
                 }
-                else if (thisTeacher.commentNum_int + thisTeacher.voteNum_int > 19)
+                else if (thisTeacher.commentNum+ thisTeacher.voteNum > 19)
                 {
                     hotLabel.ForeColor = Color.IndianRed;
                 }
@@ -300,7 +305,7 @@ namespace WebCrawler_WinForm_
                 {
                     hotLabel.ForeColor = Color.Maroon;
                 }
-                if (hotLabel.Text == "0")
+                if (!thisTeacher.hasEnoughData)
                 {
                     hotLabel.Text = "<10";
                     hotLabel.ForeColor = Color.DarkGray;
@@ -526,6 +531,15 @@ namespace WebCrawler_WinForm_
                 AutoSize = true
             };
             this.Controls.Add(emptyLabel);
+        }
+
+        private void checkBox1_CheckedChanged(object sender, EventArgs e)
+        {
+            showUnrated = checkBox1.Checked ? false : true;
+            if (hasDisplayed)
+            {
+                button1.PerformClick();
+            }
         }
     }
 }

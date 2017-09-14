@@ -24,11 +24,6 @@ namespace WebCrawler_WinForm_
     {
         public const int MaximumTeacherPage = 3743;
         public static Regex TeacherDataRegex = new Regex("^https://chalaoshi.cn/teacher/\\d+/");
-        public struct CourseAndGPA
-        {
-            public string CourseName;
-
-        }
     }
 
     public class TeacherData
@@ -37,10 +32,10 @@ namespace WebCrawler_WinForm_
         public string name;
         public string url;
         public string faculty;
+        public bool hasEnoughData = true;
         public double score;
-        public string score_string;
-        public double callNameRate_double;
-        public string callNameRate_string;
+        public double callNameRate;
+
         public enum CallName_enum
         {
             No = 0,
@@ -49,14 +44,49 @@ namespace WebCrawler_WinForm_
             Unknown = 3,
         };
         public CallName_enum callNameState;
-        public int voteNum_int;
-        public string voteNum_string;
-        public int commentNum_int;
-        public string commentNum_string;
+        public int voteNum;
+        public int commentNum;
         public List<CourseData> courseList = new List<CourseData>();
         public CourseData templateCourse;
 
         public static List<TeacherData> totalTeacherList = new List<TeacherData>();
+
+        public string ToString(string format)
+        {
+            switch (format)
+            {
+                case ("Score"):
+                    if (hasEnoughData)
+                        return score.ToString("f2");
+                    else
+                        return "N/A";
+                case ("VoteNum"):
+                    if (hasEnoughData)
+                        return voteNum.ToString();
+                    else
+                        return "<5";
+                case ("CommentNum"):
+                    if (this.hasEnoughData)
+                        return commentNum.ToString();
+                    else
+                        return "<5";
+                case ("HotNum"):
+                    if (hasEnoughData)
+                        return commentNum + voteNum.ToString();
+                    else
+                        return "<10";
+                case ("CallNameRate"):
+                    if (hasEnoughData)
+                    {
+                        string callNameRate_string = (callNameRate * 100).ToString() + "%";
+                        return callNameRate_string;
+                    }
+                    else
+                        return "N/A";
+                default:
+                    throw new Exception("Undefined Behavior");
+            }
+        }
     }
 
     class GetData
@@ -74,26 +104,24 @@ namespace WebCrawler_WinForm_
                     id = int.Parse(Line[1]),
                     url = Line[2],
                     faculty = Line[3],
-                    score_string = Line[4],
-                    callNameRate_string = Line[5],
-                    voteNum_string = Line[6],
-                    commentNum_string = Line[7],
                 };
-                thisTeacher.score = (thisTeacher.score_string == "N/A") ? 0 : double.Parse(thisTeacher.score_string);
-                thisTeacher.callNameRate_double = double.Parse(thisTeacher.callNameRate_string.Replace("%", "")) / 100.0;
-                thisTeacher.voteNum_int = (thisTeacher.voteNum_string == "<5") ? 0 : int.Parse(Line[6]);
-                thisTeacher.commentNum_int = (thisTeacher.commentNum_string == "<5") ? 0 : int.Parse(Line[7]);
-                if (thisTeacher.voteNum_int < 5)
+                thisTeacher.score = (Line[4] == "N/A") ? 0 : double.Parse(Line[4]);
+                thisTeacher.callNameRate = double.Parse(Line[5].Replace("%", "")) / 100.0;
+                thisTeacher.voteNum = (Line[6] == "<5") ? 0 : int.Parse(Line[6]);
+                thisTeacher.commentNum = (Line[7] == "<5") ? 0 : int.Parse(Line[7]);
+                if (thisTeacher.voteNum < 5)
+                {
+                    thisTeacher.hasEnoughData = false;
                     thisTeacher.callNameState = TeacherData.CallName_enum.Unknown;
-                else if (thisTeacher.callNameRate_double > 0.5)
+                }   
+                else if (thisTeacher.callNameRate > 0.5)
                     thisTeacher.callNameState = TeacherData.CallName_enum.Yes;
-                else if (thisTeacher.callNameRate_double > 0.2)
+                else if (thisTeacher.callNameRate > 0.2)
                     thisTeacher.callNameState = TeacherData.CallName_enum.Possible;
                 else
                     thisTeacher.callNameState = TeacherData.CallName_enum.No;
 
                 var hisCourseList = new List<CourseData>();
-
                 double overallGPA_number;
                 for (int i = 8; i < Line.Length - 2; i++)
                 {
@@ -168,69 +196,35 @@ namespace WebCrawler_WinForm_
         public double OverallGPAOfTeacher;//某个老师的GPA
         public int GPASampleSizeOfTeacher_int;//某个老师的总样本量
         public string GPASampleSizeOfTeacher_string;
+        public bool hasEnoughData = true;
 
         public static List<CourseData> courseDataList = new List<CourseData>();
-
     }
 
     public class SearchAlgorithm
     {
-        public List<TeacherData> SearchTeacherName(string keyword, int maxResults)
+        public List<TeacherData> SearchTeacherName(string keyword, int maxResults, bool showUnrated)
         {
-            List<TeacherData> searchedTeacherList = new List<TeacherData>();
-            int i = 0;
-            foreach (var teacher in TeacherData.totalTeacherList)
+            if (showUnrated)
             {
-                if (teacher.name.ToLower().Contains(keyword.ToLower()))
-                {
-                    searchedTeacherList.Add(teacher);
-                    i++;
-                    if (i >= maxResults) break;
-                }
+                return TeacherData.totalTeacherList.Where(t => t.name.ToUpper().Contains(keyword.ToUpper())).Take(maxResults).ToList();
             }
-            return searchedTeacherList;
+            else
+            {
+                return TeacherData.totalTeacherList.Where(t => t.hasEnoughData).Where(t => t.name.ToUpper().Contains(keyword.ToUpper())).Take(maxResults).ToList();
+            }
         }
 
-        public List<TeacherData> SearchTeacherName(string keyword)
+        public List<CourseData> SearchCourseName(string keyword, int maxResults, bool showUnrated)
         {
-            List<TeacherData> searchedTeacherList = new List<TeacherData>();
-            foreach (var teacher in TeacherData.totalTeacherList)
+            if (showUnrated)
             {
-                if (teacher.name.ToLower().Contains(keyword.ToLower()))
-                {
-                    searchedTeacherList.Add(teacher);
-                }
+                return CourseData.courseDataList.Where(c => c.CourseName.ToUpper().Contains(keyword.ToUpper())).Take(maxResults).ToList();
             }
-            return searchedTeacherList;
-        }
-
-        public List<CourseData> SearchCourseName(string keyword, int maxResults)
-        {
-            List<CourseData> searchedCourseList = new List<CourseData>();
-            int i = 0;
-            foreach(var course in CourseData.courseDataList)
+            else
             {
-                if (course.CourseName.ToLower().Contains(keyword.ToLower()))
-                {
-                    searchedCourseList.Add(course);
-                    i++;
-                    if (i >= maxResults) break;
-                }
+                return CourseData.courseDataList.Where(c => c.hasEnoughData).Where(c => c.CourseName.ToUpper().Contains(keyword.ToUpper())).Take(maxResults).ToList();
             }
-            return searchedCourseList;
-        }
-
-        public List<CourseData> SearchCourseName(string keyword)
-        {
-            List<CourseData> searchedCourseList = new List<CourseData>();
-            foreach (var course in CourseData.courseDataList)
-            {
-                if (course.CourseName.ToLower().Contains(keyword.ToLower()))
-                {
-                    searchedCourseList.Add(course);
-                }
-            }
-            return searchedCourseList;
         }
     }
 }

@@ -34,7 +34,7 @@ namespace WebCrawler_WinForm_
         private void ListAllItems()
         {
             var score_string = teacherData.ToString("Score");
-            this.Text = $"{teacherData.name}, 分数：{score_string}";
+            this.Text = $"{teacherData.Name}, 分数：{score_string}";
             var groupBox1 = new GroupBox()
             {
                 Text = string.Empty,
@@ -46,7 +46,7 @@ namespace WebCrawler_WinForm_
 
             var nameLabel = new Label()
             {
-                Text = teacherData.name,
+                Text = teacherData.Name,
                 Font = new Font("微软雅黑", 18, FontStyle.Regular),
                 Location = new Point(30, 30),
                 AutoSize = true
@@ -55,7 +55,7 @@ namespace WebCrawler_WinForm_
 
             var facultyLabel = new Label()
             {
-                Text = $"浙江大学 {teacherData.faculty}",
+                Text = teacherData.Faculty.Name,
                 Font = new Font("微软雅黑", 11, FontStyle.Regular),
                 Location = new Point(35, 90),
                 AutoSize = true
@@ -119,7 +119,7 @@ namespace WebCrawler_WinForm_
 
             int i = 0;
             int step = 45;
-            if (teacherData.courseList.Count == 0)
+            if (teacherData.CourseList.Count == 0)
             {
                 var noCourseLabel = new Label()
                 {
@@ -133,11 +133,11 @@ namespace WebCrawler_WinForm_
 
             else
             {
-                foreach (CourseData thisCourse in teacherData.courseList)
+                foreach (CourseData thisCourse in teacherData.CourseList)
                 {
                     var thisCourseLabel = new Label()
                     {
-                        Text = thisCourse.CourseName.Replace("\"", ""),
+                        Text = thisCourse.Name.Replace("\"", ""),
                         Font = new Font("微软雅黑", 11, FontStyle.Regular),
                         Location = new Point(35, 70 + i * step),
                         AutoSize = true
@@ -146,7 +146,7 @@ namespace WebCrawler_WinForm_
                     CourseData selectedCourse = null;
                     foreach (CourseData course in CourseData.courseDataList)
                     {
-                        if (course.CourseName.Replace("\"", "") == thisCourseLabel.Text)
+                        if (course.Name.Replace("\"", "") == thisCourseLabel.Text)
                         {
                             selectedCourse = course;
                             break;
@@ -212,7 +212,7 @@ namespace WebCrawler_WinForm_
                         var nameLabel2 = new Label()
                         {
                             Location = new Point(35, 70 + i * step),
-                            Text = thisCourse.CourseName.Replace("\"", "").Substring(17),
+                            Text = thisCourse.Name.Replace("\"", "").Substring(17),
                             Font = new Font("微软雅黑", 11),
                             AutoSize = true
                         };

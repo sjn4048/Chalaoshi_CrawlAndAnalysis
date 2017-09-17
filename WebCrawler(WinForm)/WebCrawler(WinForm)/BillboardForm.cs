@@ -36,20 +36,20 @@ namespace WebCrawler_WinForm_
             switch (comboBox1.SelectedIndex)
             {
                 case 0:
-                    teacherList = TeacherData.totalTeacherList.OrderByDescending(x => x.score).ToList();
+                    teacherList = TeacherData.totalTeacherList.OrderByDescending(x => x.Score).ToList();
                     break;
                 case 1:
                     foreach (TeacherData teacherData in TeacherData.totalTeacherList)
                     {
-                        if (teacherData.score != 0) teacherList.Add(teacherData);
+                        if (teacherData.Score != 0) teacherList.Add(teacherData);
                     }
-                    teacherList = teacherList.OrderBy(y => y.score).ToList();
+                    teacherList = teacherList.OrderBy(y => y.Score).ToList();
                     break;
                 case 2:
-                    teacherList = TeacherData.totalTeacherList.OrderByDescending(x => x.commentNum + x.voteNum).ToList();
+                    teacherList = TeacherData.totalTeacherList.OrderByDescending(x => x.CommentNum + x.VoteNum).ToList();
                     break;
                 case 3:
-                    teacherList = TeacherData.totalTeacherList.OrderByDescending(x => x.courseList.Count).ToList();
+                    teacherList = TeacherData.totalTeacherList.OrderByDescending(x => x.CourseList.Count).ToList();
                     break;
                 case 4:
                     foreach (var teacherData in TeacherData.totalTeacherList)
@@ -106,7 +106,7 @@ namespace WebCrawler_WinForm_
                 var thisTeacher = teacherList[i];
                 var nameLabel = new Label()
                 {
-                    Text = thisTeacher.name,
+                    Text = thisTeacher.Name,
                     Font = new Font("微软雅黑", 11, FontStyle.Regular),
                     Location = new Point(35, 70 + i * step),
                     AutoSize = true,
@@ -140,19 +140,19 @@ namespace WebCrawler_WinForm_
                     AutoSize = true,
                     TextAlign = ContentAlignment.MiddleCenter
                 };
-                if (thisTeacher.score > 9)
+                if (thisTeacher.Score > 9)
                 {
                     scoreLabel.ForeColor = Color.Green;
                 }
-                else if (thisTeacher.score > 7.5)
+                else if (thisTeacher.Score > 7.5)
                 {
                     scoreLabel.ForeColor = Color.Blue;
                 }
-                else if (thisTeacher.score > 6)
+                else if (thisTeacher.Score > 6)
                 {
                     scoreLabel.ForeColor = Color.Goldenrod;
                 }
-                else if (thisTeacher.score > 4)
+                else if (thisTeacher.Score > 4)
                 {
                     scoreLabel.ForeColor = Color.IndianRed;
                 }
@@ -164,25 +164,25 @@ namespace WebCrawler_WinForm_
 
                 var courseNumLabel = new Label()
                 {
-                    Text = thisTeacher.courseList.Count.ToString(),
+                    Text = thisTeacher.CourseList.Count.ToString(),
                     Font = new Font("微软雅黑", 11, FontStyle.Regular),
                     Location = new Point(350, 70 + i * step),
                     AutoSize = true,
                     TextAlign = ContentAlignment.MiddleCenter
                 };
-                if (thisTeacher.courseList.Count > 13)
+                if (thisTeacher.CourseList.Count > 13)
                 {
                     courseNumLabel.ForeColor = Color.Green;
                 }
-                else if (thisTeacher.courseList.Count > 7)
+                else if (thisTeacher.CourseList.Count > 7)
                 {
                     courseNumLabel.ForeColor = Color.Green;
                 }
-                else if (thisTeacher.courseList.Count > 2)
+                else if (thisTeacher.CourseList.Count > 2)
                 {
                     courseNumLabel.ForeColor = Color.Green;
                 }
-                else if (thisTeacher.courseList.Count > 0)
+                else if (thisTeacher.CourseList.Count > 0)
                 {
                     courseNumLabel.ForeColor = Color.IndianRed;
                 }
@@ -201,19 +201,19 @@ namespace WebCrawler_WinForm_
                     AutoSize = true,
                     TextAlign = ContentAlignment.MiddleCenter
                 };
-                if (thisTeacher.commentNum + thisTeacher.voteNum > 499)
+                if (thisTeacher.CommentNum + thisTeacher.VoteNum > 499)
                 {
                     hotLabel.ForeColor = Color.Green;
                 }
-                else if (thisTeacher.commentNum + thisTeacher.voteNum > 199)
+                else if (thisTeacher.CommentNum + thisTeacher.VoteNum > 199)
                 {
                     hotLabel.ForeColor = Color.Blue;
                 }
-                else if (thisTeacher.commentNum + thisTeacher.voteNum > 69)
+                else if (thisTeacher.CommentNum + thisTeacher.VoteNum > 69)
                 {
                     hotLabel.ForeColor = Color.Goldenrod;
                 }
-                else if (thisTeacher.commentNum + thisTeacher.voteNum > 19)
+                else if (thisTeacher.CommentNum + thisTeacher.VoteNum > 19)
                 {
                     hotLabel.ForeColor = Color.IndianRed;
                 }

@@ -49,7 +49,7 @@ namespace WebCrawler_WinForm_
 
         private void MainForm_Load(object sender, EventArgs e)
         {
-
+            Config.ReadConfig();
         }
 
         private void UpdateLabel_Click(object sender, EventArgs e)

@@ -11,12 +11,6 @@ using System.Threading.Tasks;
 using System.Threading;
 using System.Diagnostics;
 using System.Net;
-using Abot.Core;
-using Abot.Crawler;
-using Abot.Poco;
-using CsQuery.HtmlParser;
-using HtmlParserSharp;
-using HtmlAgilityPack;
 
 namespace WebCrawler_WinForm_
 {
@@ -28,13 +22,13 @@ namespace WebCrawler_WinForm_
 
     public class TeacherData
     {
-        public int id;//统一辨识号
-        public string name;
-        public string url;
-        public string faculty;
-        public bool hasEnoughData = true;
-        public double score;
-        public double callNameRate;
+        public int ID;//统一辨识号
+        public string Name;
+        public string Url;
+        public FacultyData Faculty;
+        public bool HasEnoughData = true;
+        public double Score;
+        public double CallNameRate;
 
         public enum CallName_enum
         {
@@ -43,11 +37,11 @@ namespace WebCrawler_WinForm_
             Yes = 2,
             Unknown = 3,
         };
-        public CallName_enum callNameState;
-        public int voteNum;
-        public int commentNum;
-        public List<CourseData> courseList = new List<CourseData>();
-        public CourseData templateCourse;
+        public CallName_enum CallNameState;
+        public int VoteNum;
+        public int CommentNum;
+        public List<CourseData> CourseList = new List<CourseData>();
+        public CourseData TemplateCourse;
 
         public static List<TeacherData> totalTeacherList = new List<TeacherData>();
 
@@ -56,35 +50,80 @@ namespace WebCrawler_WinForm_
             switch (format)
             {
                 case ("Score"):
-                    if (hasEnoughData)
-                        return score.ToString("f2");
+                    if (HasEnoughData)
+                        return Score.ToString("f2");
                     else
                         return "N/A";
                 case ("VoteNum"):
-                    if (hasEnoughData)
-                        return voteNum.ToString();
+                    if (HasEnoughData)
+                        return VoteNum.ToString();
                     else
                         return "<5";
                 case ("CommentNum"):
-                    if (this.hasEnoughData)
-                        return commentNum.ToString();
+                    if (this.HasEnoughData)
+                        return CommentNum.ToString();
                     else
                         return "<5";
                 case ("HotNum"):
-                    if (hasEnoughData)
-                        return commentNum + voteNum.ToString();
+                    if (HasEnoughData)
+                    {
+                        string hotNum_string = (CommentNum + VoteNum).ToString();
+                        return hotNum_string;
+                    }
                     else
                         return "<10";
                 case ("CallNameRate"):
-                    if (hasEnoughData)
+                    if (HasEnoughData)
                     {
-                        string callNameRate_string = (callNameRate * 100).ToString() + "%";
+                        string callNameRate_string = (CallNameRate * 100).ToString() + "%";
                         return callNameRate_string;
                     }
                     else
                         return "N/A";
                 default:
                     throw new Exception("Undefined Behavior");
+            }
+        }//重载的ToString()方法，用于打印数据
+    }
+
+    public class CourseData
+    {
+        public string Name;
+        public List<TeacherData> CourseTeachers;
+        public double OverallGPAOfThisCourse;//所有老师的总GPA
+        public int TotalSampleSize;//所有老师的总样本量
+        public double TotalGPA;//中间量
+        public double OverallGPAOfTeacher;//某个老师的GPA
+        public int GPASampleSizeOfTeacher_int;//某个老师的总样本量
+        public string GPASampleSizeOfTeacher_string;
+        public bool HasEnoughData = true;
+
+        public static List<CourseData> courseDataList = new List<CourseData>();
+    }
+
+    public class FacultyData
+    {
+        public string Name;
+        public int TeacherCount = 0;
+        public List<TeacherData> TeacherList = new List<TeacherData>();
+
+        public static List<FacultyData> FacultyList = new List<FacultyData>();
+
+        public static FacultyData GetFaculty(TeacherData teacher, string name)
+        {
+            FacultyData thisFaculty;
+            if ((thisFaculty = FacultyList.Where(f => f.Name == name).FirstOrDefault()) != null)
+            {
+                thisFaculty.TeacherList.Add(teacher);
+                thisFaculty.TeacherCount++;
+                return thisFaculty;
+            }
+            else
+            {
+                var newFaculty = new FacultyData { Name = name, TeacherCount = 1 };
+                newFaculty.TeacherList.Add(teacher);
+                FacultyList.Add(newFaculty);
+                return newFaculty;
             }
         }
     }
@@ -93,33 +132,34 @@ namespace WebCrawler_WinForm_
     {
         public void GetTeacherDataFromCsv(FileStream file)
         {
-            StreamReader streamReader = new StreamReader(file,Encoding. Default);
+            StreamReader streamReader = new StreamReader(file, Encoding.Default);
             string teacherLine = string.Empty;
             while ((teacherLine = streamReader.ReadLine()) != null)
             {
                 var Line = teacherLine.Split(',');
                 TeacherData thisTeacher = new TeacherData()
                 {
-                    name = Line[0],
-                    id = int.Parse(Line[1]),
-                    url = Line[2],
-                    faculty = Line[3],
+                    Name = Line[0],
+                    ID = int.Parse(Line[1]),
+                    Url = Line[2],
                 };
-                thisTeacher.score = (Line[4] == "N/A") ? 0 : double.Parse(Line[4]);
-                thisTeacher.callNameRate = double.Parse(Line[5].Replace("%", "")) / 100.0;
-                thisTeacher.voteNum = (Line[6] == "<5") ? 0 : int.Parse(Line[6]);
-                thisTeacher.commentNum = (Line[7] == "<5") ? 0 : int.Parse(Line[7]);
-                if (thisTeacher.voteNum < 5)
+                thisTeacher.Faculty = FacultyData.GetFaculty(thisTeacher, Line[3]);
+                thisTeacher.Score = (Line[4] == "N/A") ? 0 : double.Parse(Line[4]);
+                thisTeacher.CallNameRate = double.Parse(Line[5].Replace("%", "")) / 100.0;
+                thisTeacher.VoteNum = (Line[6] == "<5") ? 0 : int.Parse(Line[6]);
+                thisTeacher.CommentNum = (Line[7] == "<5") ? 0 : int.Parse(Line[7]);
+
+                if (thisTeacher.VoteNum < 5)
                 {
-                    thisTeacher.hasEnoughData = false;
-                    thisTeacher.callNameState = TeacherData.CallName_enum.Unknown;
-                }   
-                else if (thisTeacher.callNameRate > 0.5)
-                    thisTeacher.callNameState = TeacherData.CallName_enum.Yes;
-                else if (thisTeacher.callNameRate > 0.2)
-                    thisTeacher.callNameState = TeacherData.CallName_enum.Possible;
+                    thisTeacher.HasEnoughData = false;
+                    thisTeacher.CallNameState = TeacherData.CallName_enum.Unknown;
+                }
+                else if (thisTeacher.CallNameRate > 0.5)
+                    thisTeacher.CallNameState = TeacherData.CallName_enum.Yes;
+                else if (thisTeacher.CallNameRate > 0.2)
+                    thisTeacher.CallNameState = TeacherData.CallName_enum.Possible;
                 else
-                    thisTeacher.callNameState = TeacherData.CallName_enum.No;
+                    thisTeacher.CallNameState = TeacherData.CallName_enum.No;
 
                 var hisCourseList = new List<CourseData>();
                 double overallGPA_number;
@@ -148,20 +188,20 @@ namespace WebCrawler_WinForm_
                     int overallGPASize_int = int.Parse(overallGPASize_string.Replace("+", ""));
                     var thisCourseData = new CourseData()
                     {
-                        CourseName = courseName,
+                        Name = courseName,
                         GPASampleSizeOfTeacher_string = overallGPASize_string,
                         GPASampleSizeOfTeacher_int = overallGPASize_int,
                         OverallGPAOfTeacher = overallGPA_number
                     };
                     hisCourseList.Add(thisCourseData);
                     var query = from c in CourseData.courseDataList//需要debug
-                                where c.CourseName == courseName
+                                where c.Name == courseName
                                 select c;
 
                     if (!query.Any())
                     {
                         var courseData = new CourseData();
-                        courseData.CourseName = courseName;
+                        courseData.Name = courseName;
                         courseData.CourseTeachers = new List<TeacherData>();
                         courseData.CourseTeachers.Add(thisTeacher);
                         courseData.TotalGPA += overallGPA_number * overallGPASize_int;
@@ -171,7 +211,7 @@ namespace WebCrawler_WinForm_
                     }
                     else
                     {
-                        foreach (var courseData in CourseData.courseDataList.Select(x => x).Where(x => x.CourseName == courseName))
+                        foreach (var courseData in CourseData.courseDataList.Select(x => x).Where(x => x.Name == courseName))
                         {
                             courseData.CourseTeachers.Add(thisTeacher);
                             courseData.TotalGPA += overallGPA_number * overallGPASize_int;
@@ -180,25 +220,10 @@ namespace WebCrawler_WinForm_
                         }
                     }
                 }
-                thisTeacher.courseList = hisCourseList;
+                thisTeacher.CourseList = hisCourseList;
                 TeacherData.totalTeacherList.Add(thisTeacher);
-                }
             }
         }
-
-    public class CourseData
-    {
-        public string CourseName;
-        public List<TeacherData> CourseTeachers;
-        public double OverallGPAOfThisCourse;//所有老师的总GPA
-        public int TotalSampleSize;//所有老师的总样本量
-        public double TotalGPA;//中间量
-        public double OverallGPAOfTeacher;//某个老师的GPA
-        public int GPASampleSizeOfTeacher_int;//某个老师的总样本量
-        public string GPASampleSizeOfTeacher_string;
-        public bool hasEnoughData = true;
-
-        public static List<CourseData> courseDataList = new List<CourseData>();
     }
 
     public class SearchAlgorithm
@@ -207,11 +232,11 @@ namespace WebCrawler_WinForm_
         {
             if (showUnrated)
             {
-                return TeacherData.totalTeacherList.Where(t => t.name.ToUpper().Contains(keyword.ToUpper())).Take(maxResults).ToList();
+                return TeacherData.totalTeacherList.Where(t => t.Name.ToUpper().Contains(keyword.ToUpper())).Take(maxResults).ToList();
             }
             else
             {
-                return TeacherData.totalTeacherList.Where(t => t.hasEnoughData).Where(t => t.name.ToUpper().Contains(keyword.ToUpper())).Take(maxResults).ToList();
+                return TeacherData.totalTeacherList.Where(t => t.HasEnoughData).Where(t => t.Name.ToUpper().Contains(keyword.ToUpper())).Take(maxResults).ToList();
             }
         }
 
@@ -219,11 +244,11 @@ namespace WebCrawler_WinForm_
         {
             if (showUnrated)
             {
-                return CourseData.courseDataList.Where(c => c.CourseName.ToUpper().Contains(keyword.ToUpper())).Take(maxResults).ToList();
+                return CourseData.courseDataList.Where(c => c.Name.ToUpper().Contains(keyword.ToUpper())).Take(maxResults).ToList();
             }
             else
             {
-                return CourseData.courseDataList.Where(c => c.hasEnoughData).Where(c => c.CourseName.ToUpper().Contains(keyword.ToUpper())).Take(maxResults).ToList();
+                return CourseData.courseDataList.Where(c => c.HasEnoughData).Where(c => c.Name.ToUpper().Contains(keyword.ToUpper())).Take(maxResults).ToList();
             }
         }
     }

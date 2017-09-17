@@ -18,7 +18,7 @@ namespace WebCrawler_WinForm_
 
         bool hasDisplayed = false;
         bool showUnrated = true;
-        int maxItemsPerPage = 30;
+        int maxItemsPerPage = Config.MaxResultPerPage;
 
         public SearchForm()
         {
@@ -44,6 +44,7 @@ namespace WebCrawler_WinForm_
         }
         private void SearchForm_Load(object sender, EventArgs e)
         {
+            this.checkBox1.Checked = Config.HideUnrated;
 
         }
 
@@ -59,7 +60,21 @@ namespace WebCrawler_WinForm_
                 var search = new SearchAlgorithm();
                 var searchedTeacherList = search.SearchTeacherName(keyword, maxItemsPerPage, showUnrated);
                 var searchedCourseList = search.SearchCourseName(keyword, maxItemsPerPage, showUnrated);
-                DisplayResults(searchedTeacherList, searchedCourseList);
+                switch (Config.showOrder)
+                {
+                    case (Config.ShowOrder.Score):
+                        DisplayResults(searchedTeacherList.OrderByDescending(t => t.Score).ToList(), searchedCourseList.OrderByDescending(c => c.OverallGPAOfThisCourse).ToList());
+                        break;
+                    case (Config.ShowOrder.HotNum):
+                        DisplayResults(searchedTeacherList.OrderByDescending(t => t.CommentNum + t.VoteNum).ToList(), searchedCourseList.OrderByDescending(c => c.TotalSampleSize).ToList());
+                        break;
+                    case (Config.ShowOrder.CallNameRate):
+                        DisplayResults(searchedTeacherList.OrderBy(t => t.CallNameRate).ToList(), searchedCourseList);
+                        break;
+                    case (Config.ShowOrder.None):
+                        DisplayResults(searchedTeacherList, searchedCourseList);
+                        break;
+                }
             }
 
         }
@@ -121,7 +136,7 @@ namespace WebCrawler_WinForm_
                 };
                 callNameRateLabel1.Click += (s, arg) =>
                 {
-                    DisplayResults(searchedTeacherList.OrderBy(m => m.callNameState).ToList(), searchedCourseList);
+                    DisplayResults(searchedTeacherList.OrderBy(m => m.CallNameState).ToList(), searchedCourseList);
                 };
                 callNameRateLabel1.MouseEnter += (s, arg) =>
                 {
@@ -144,7 +159,7 @@ namespace WebCrawler_WinForm_
                 groupBox1.Controls.Add(scoreLabel1);
                 scoreLabel1.Click += (s, arg) =>
                 {
-                    DisplayResults(searchedTeacherList.OrderByDescending(m => m.score).ToList(), searchedCourseList);
+                    DisplayResults(searchedTeacherList.OrderByDescending(m => m.Score).ToList(), searchedCourseList);
                 };
                 scoreLabel1.MouseEnter += (s, arg) =>
                 {
@@ -174,7 +189,7 @@ namespace WebCrawler_WinForm_
                 };
                 commentNumLabel1.Click += (s, arg) =>
                 {
-                    DisplayResults(searchedTeacherList.OrderByDescending(m => m.commentNum + m.voteNum).ToList(), searchedCourseList);
+                    DisplayResults(searchedTeacherList.OrderByDescending(m => m.CommentNum + m.VoteNum).ToList(), searchedCourseList);
                 };
                 commentNumLabel1.MouseEnter += (s, arg) =>
                 {
@@ -193,7 +208,7 @@ namespace WebCrawler_WinForm_
                 var nameLabel = new Label()
                 {
                     Location = new Point(xStart, yStart + i * step),
-                    Text = thisTeacher.name,
+                    Text = thisTeacher.Name,
                     Font = new Font("微软雅黑", 12),
                     AutoSize = true,
                     
@@ -225,16 +240,16 @@ namespace WebCrawler_WinForm_
                     AutoSize = true,
                     TextAlign = ContentAlignment.MiddleCenter
                 };
-                if (thisTeacher.callNameState == TeacherData.CallName_enum.Unknown)
+                if (thisTeacher.CallNameState == TeacherData.CallName_enum.Unknown)
                 {
                     callNameRateLabel.Text = "N/A";
                     callNameRateLabel.ForeColor = Color.DarkGray;
                 }
-                else if (thisTeacher.callNameState == TeacherData.CallName_enum.Yes)
+                else if (thisTeacher.CallNameState == TeacherData.CallName_enum.Yes)
                 {
                     callNameRateLabel.ForeColor = Color.Maroon;
                 }
-                else if (thisTeacher.callNameState == TeacherData.CallName_enum.Possible)
+                else if (thisTeacher.CallNameState == TeacherData.CallName_enum.Possible)
                 {
                     callNameRateLabel.ForeColor = Color.Goldenrod;
                 }
@@ -252,23 +267,23 @@ namespace WebCrawler_WinForm_
                     AutoSize = true,
                 };
 
-                if (!thisTeacher.hasEnoughData)
+                if (!thisTeacher.HasEnoughData)
                 {
                     scoreLabel.ForeColor = Color.DarkGray;
                 }
-                else if (thisTeacher.score > 9)
+                else if (thisTeacher.Score > 9)
                 {
                     scoreLabel.ForeColor = Color.Green;
                 }
-                else if (thisTeacher.score > 7.5)
+                else if (thisTeacher.Score > 7.5)
                 {
                     scoreLabel.ForeColor = Color.Blue;
                 }
-                else if (thisTeacher.score > 6)
+                else if (thisTeacher.Score > 6)
                 {
                     scoreLabel.ForeColor = Color.Goldenrod;
                 }
-                else if (thisTeacher.score > 4)
+                else if (thisTeacher.Score > 4)
                 {
                     scoreLabel.ForeColor = Color.IndianRed;
                 }
@@ -281,23 +296,23 @@ namespace WebCrawler_WinForm_
                 var hotLabel = new Label()
                 {
                     Location = new Point(xStart + 480, yStart + i * step),
-                    Text = (thisTeacher.commentNum + thisTeacher.voteNum).ToString(),
+                    Text = (thisTeacher.CommentNum + thisTeacher.VoteNum).ToString(),
                     Font = new Font("微软雅黑", 12),
                     AutoSize = true,
                 };
-                if (thisTeacher.commentNum + thisTeacher.voteNum > 999)
+                if (thisTeacher.CommentNum + thisTeacher.VoteNum > 999)
                 {
                     hotLabel.ForeColor = Color.Green;
                 }
-                else if (thisTeacher.commentNum + thisTeacher.voteNum > 299)
+                else if (thisTeacher.CommentNum + thisTeacher.VoteNum > 299)
                 {
                     hotLabel.ForeColor = Color.Blue;
                 }
-                else if (thisTeacher.commentNum + thisTeacher.voteNum > 99)
+                else if (thisTeacher.CommentNum + thisTeacher.VoteNum > 99)
                 {
                     hotLabel.ForeColor = Color.Goldenrod;
                 }
-                else if (thisTeacher.commentNum+ thisTeacher.voteNum > 19)
+                else if (thisTeacher.CommentNum+ thisTeacher.VoteNum > 19)
                 {
                     hotLabel.ForeColor = Color.IndianRed;
                 }
@@ -305,7 +320,7 @@ namespace WebCrawler_WinForm_
                 {
                     hotLabel.ForeColor = Color.Maroon;
                 }
-                if (!thisTeacher.hasEnoughData)
+                if (!thisTeacher.HasEnoughData)
                 {
                     hotLabel.Text = "<10";
                     hotLabel.ForeColor = Color.DarkGray;
@@ -392,7 +407,7 @@ namespace WebCrawler_WinForm_
                     var nameLabel = new Label()
                     {
                         Location = new Point(xStart, yStart + j * step),
-                        Text = thisCourse.CourseName.Replace("\"", ""),
+                        Text = thisCourse.Name.Replace("\"", ""),
                         Font = new Font("微软雅黑", 12),
                         AutoSize = true,
 
@@ -487,7 +502,7 @@ namespace WebCrawler_WinForm_
                         var nameLabelAppend = new Label()
                         {
                             Location = new Point(xStart, yStart + j * step),
-                            Text = thisCourse.CourseName.Replace("\"", "").Substring(15),
+                            Text = thisCourse.Name.Replace("\"", "").Substring(15),
                             Font = new Font("微软雅黑", 12),
                             AutoSize = true,
 

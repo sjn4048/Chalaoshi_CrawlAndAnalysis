@@ -305,7 +305,7 @@ namespace WebCrawler_WinForm_
         void WriteIntoCSV()
         {
             var fileName = $"CLSDatabase.csv";
-            FileStream file = new FileStream(fileName, FileMode.Create, FileAccess.ReadWrite);//在此处定义，保证读写锁的最大性能
+            FileStream file = new FileStream(fileName, FileMode.Create, FileAccess.ReadWrite);
             StreamWriter streamWriter = new StreamWriter(file, Encoding.Default); // 创建写入流
             for (int i = 0; i < TotalInfo.Count; i++)
             {

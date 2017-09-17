@@ -31,7 +31,8 @@ namespace WebCrawler_WinForm_
 
         private void button3_Click(object sender, EventArgs e)
         {
-            MessageBox.Show("此处预留给更多属性设置，这些设置将在下个版本上线", "预留位置");
+            new SetConfigForm() { StartPosition = FormStartPosition.CenterScreen, TopMost = true }.Show();
+            this.Close();
         }
 
         private void button2_Click_1(object sender, EventArgs e)

@@ -42,7 +42,7 @@ namespace WebCrawler_WinForm_
 
             var courseNameLabel = new Label()
             {
-                Text = courseData.CourseName.Replace("\"", ""),
+                Text = courseData.Name.Replace("\"", ""),
                 Font = new Font("微软雅黑", 18, FontStyle.Regular),
                 Location = new Point(30, 30),
                 AutoSize = true
@@ -66,7 +66,7 @@ namespace WebCrawler_WinForm_
 
         private void ClassDataForm_Load(object sender, EventArgs e)
         {
-            this.Text = courseData.CourseName.Replace("\"", "");
+            this.Text = courseData.Name.Replace("\"", "");
         }
 
         private void DisplayResults(List<TeacherData> teacherList)
@@ -96,7 +96,7 @@ namespace WebCrawler_WinForm_
             scoreLabel1.Click += (s, arg) =>
             {
                 groupBox2.Controls.Clear();
-                DisplayResults(teacherList.OrderByDescending(m => m.score).ToList());
+                DisplayResults(teacherList.OrderByDescending(m => m.Score).ToList());
             };
             scoreLabel1.MouseEnter += (s, arg) =>
             {
@@ -119,7 +119,7 @@ namespace WebCrawler_WinForm_
             gpaLabel1.Click += (s, arg) =>
             {
                 groupBox2.Controls.Clear();
-                DisplayResults(teacherList.OrderByDescending(m => m.templateCourse.OverallGPAOfTeacher).ToList());
+                DisplayResults(teacherList.OrderByDescending(m => m.TemplateCourse.OverallGPAOfTeacher).ToList());
             };
             gpaLabel1.MouseEnter += (s, arg) =>
             {
@@ -135,18 +135,18 @@ namespace WebCrawler_WinForm_
             {
                 var teacherNameLabel = new Label()
                 {
-                    Text = teacher.name,
+                    Text = teacher.Name,
                     Font = new Font("微软雅黑", 11, FontStyle.Regular),
                     Location = new Point(30, 80 + i * step),
                     AutoSize = true,
                     
                 };
                 CourseData selectedCourse = null;
-                foreach (CourseData course in teacher.courseList)
+                foreach (CourseData course in teacher.CourseList)
                 {
-                    if (course.CourseName == courseData.CourseName)
+                    if (course.Name == courseData.Name)
                     {
-                        teacher.templateCourse =  selectedCourse = course;
+                        teacher.TemplateCourse =  selectedCourse = course;
                         break;
                     }
                 }
@@ -176,23 +176,23 @@ namespace WebCrawler_WinForm_
                     Font = new Font("微软雅黑", 13),
                     AutoSize = true,
                 };
-                if (!teacher.hasEnoughData)
+                if (!teacher.HasEnoughData)
                 {
                     scoreLabel.ForeColor = Color.DarkGray;
                 }
-                else if (teacher.score > 9)
+                else if (teacher.Score > 9)
                 {
                     scoreLabel.ForeColor = Color.Green;
                 }
-                else if (teacher.score > 7.5)
+                else if (teacher.Score > 7.5)
                 {
                     scoreLabel.ForeColor = Color.Blue;
                 }
-                else if (teacher.score > 6)
+                else if (teacher.Score > 6)
                 {
                     scoreLabel.ForeColor = Color.Goldenrod;
                 }
-                else if (teacher.score > 4)
+                else if (teacher.Score > 4)
                 {
                     scoreLabel.ForeColor = Color.IndianRed;
                 }

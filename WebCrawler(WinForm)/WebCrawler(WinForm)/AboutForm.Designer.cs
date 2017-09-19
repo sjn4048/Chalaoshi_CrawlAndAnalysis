@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(AboutForm));
             this.NameLabel = new System.Windows.Forms.Label();
             this.MailLabel = new System.Windows.Forms.LinkLabel();
             this.label1 = new System.Windows.Forms.Label();
@@ -176,6 +177,7 @@
             this.Controls.Add(this.label3);
             this.Controls.Add(this.NameLabel);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximizeBox = false;
             this.Name = "AboutForm";
             this.Text = "关于本软件";

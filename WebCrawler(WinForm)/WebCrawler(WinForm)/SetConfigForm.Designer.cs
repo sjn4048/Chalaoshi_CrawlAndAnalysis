@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(SetConfigForm));
             this.label1 = new System.Windows.Forms.Label();
             this.resultTextBox = new System.Windows.Forms.TextBox();
             this.hideCheckBox = new System.Windows.Forms.CheckBox();
@@ -129,7 +130,7 @@
             // SetConfigForm
             // 
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
-            this.ClientSize = new System.Drawing.Size(363, 353);
+            this.ClientSize = new System.Drawing.Size(362, 353);
             this.Controls.Add(this.button2);
             this.Controls.Add(this.button3);
             this.Controls.Add(this.button1);
@@ -138,6 +139,7 @@
             this.Controls.Add(this.resultTextBox);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.label1);
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "SetConfigForm";
             this.Text = "参数设置";
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.SetConfigForm_FormClosed);

@@ -21,10 +21,7 @@ namespace WebCrawler_WinForm_
         private void SetConfigForm_Load(object sender, EventArgs e)
         {
             Config.ReadConfig();
-
-            resultTextBox.Text = Config.MaxResultPerPage.ToString();
-            orderComboBox.SelectedIndex = (int)Enum.Parse(typeof(Config.ShowOrder), Config.showOrder.ToString());
-            hideCheckBox.Checked = Config.HideUnrated;
+            ShowConfig();
         }
 
         private void SetConfigForm_FormClosed(object sender, FormClosedEventArgs e)
@@ -34,7 +31,11 @@ namespace WebCrawler_WinForm_
 
         private void button1_Click(object sender, EventArgs e)
         {
-            Config.ReadConfig();
+            if (MessageBox.Show("这将重置设置为默认参数，是否确认？", "确认", MessageBoxButtons.OKCancel, MessageBoxIcon.Question) == DialogResult.OK)
+            {
+                Config.SetInitialConfig();
+                ShowConfig();
+            }
         }
 
         private void button2_Click(object sender, EventArgs e)
@@ -46,6 +47,13 @@ namespace WebCrawler_WinForm_
         {
             Config.SetConfig(int.Parse(resultTextBox.Text), hideCheckBox.Checked, (Config.ShowOrder)orderComboBox.SelectedIndex);
             this.Close();
+        }
+
+        public void ShowConfig()
+        {
+            resultTextBox.Text = Config.MaxResultPerPage.ToString();
+            orderComboBox.SelectedIndex = (int)Enum.Parse(typeof(Config.ShowOrder), Config.showOrder.ToString());
+            hideCheckBox.Checked = Config.HideUnrated;
         }
     }
 
@@ -91,12 +99,16 @@ namespace WebCrawler_WinForm_
 
         public static void SetConfig(int MaxResultPerPage, bool HideUnrated, Config.ShowOrder ShowOrder)//将窗体中的设置保存为文件，如果没有的话新建配置并保存
         {
+            if (MaxResultPerPage > 100)
+            {
+                if (MessageBox.Show("同时显示超过100个结果可能会导致界面卡顿，是否确认？", "警告", MessageBoxButtons.OKCancel, MessageBoxIcon.Question) == DialogResult.No)
+                    return;
+            }
             using (var configSr = new StreamWriter(new FileStream("Config.ini", FileMode.Create, FileAccess.ReadWrite)))
             {
                 string configString = $"{MaxResultPerPage},{HideUnrated},{ShowOrder}";
                 configSr.Write(configString);
             }
-
             ReadConfig();
         }
 

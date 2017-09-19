@@ -61,7 +61,6 @@ namespace WebCrawler_WinForm_
             {
                 MessageBox.Show("爬虫已经开始运行","无法开始任务");
             }
-
         }
 
         private void CrawlPage_Load(object sender, EventArgs e)

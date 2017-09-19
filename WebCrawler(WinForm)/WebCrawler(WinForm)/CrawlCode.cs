@@ -119,6 +119,9 @@ namespace WebCrawler_WinForm_
             }
             crawlPage.FinishButton.Enabled = true;
             crawlPage.button2.Enabled = false;
+            FileStream file = new FileStream("CLSDatabase.csv", FileMode.Open, FileAccess.Read);
+            var getData = new GetData();
+            getData.GetTeacherDataFromCsv(file);
         }
 
         void crawler_ProcessPageCrawlStarting(object sender, PageCrawlStartingArgs e)

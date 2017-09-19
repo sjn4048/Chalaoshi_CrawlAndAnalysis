@@ -176,7 +176,7 @@ namespace WebCrawler_WinForm_
                     groupBox2.Controls.Add(thisCourseLabel);
                     var thisCourseGPALabel = new Label()
                     {
-                        Text = $"{thisCourse.OverallGPAOfTeacher}/{thisCourse.GPASampleSizeOfTeacher_int}",
+                        Text = $"{thisCourse.OverallGPAOfTeacher:F2}/{thisCourse.GPASampleSizeOfTeacher_int}",
                         Font = new Font("微软雅黑", 11, FontStyle.Regular),
                         Location = new Point(400, 70 + i * step),
                         AutoSize = true

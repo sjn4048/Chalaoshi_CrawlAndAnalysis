@@ -17,8 +17,6 @@ namespace WebCrawler_WinForm_
         GroupBox groupBox2;
 
         bool hasDisplayed = false;
-        bool showUnrated = true;
-        int maxItemsPerPage = Config.MaxResultPerPage;
 
         public SearchForm()
         {
@@ -45,7 +43,6 @@ namespace WebCrawler_WinForm_
         private void SearchForm_Load(object sender, EventArgs e)
         {
             this.checkBox1.Checked = Config.HideUnrated;
-
         }
 
         private void button1_Click(object sender, EventArgs e)
@@ -58,23 +55,10 @@ namespace WebCrawler_WinForm_
             else
             {
                 var search = new SearchAlgorithm();
-                var searchedTeacherList = search.SearchTeacherName(keyword, maxItemsPerPage, showUnrated);
-                var searchedCourseList = search.SearchCourseName(keyword, maxItemsPerPage, showUnrated);
-                switch (Config.showOrder)
-                {
-                    case (Config.ShowOrder.Score):
-                        DisplayResults(searchedTeacherList.OrderByDescending(t => t.Score).ToList(), searchedCourseList.OrderByDescending(c => c.OverallGPAOfThisCourse).ToList());
-                        break;
-                    case (Config.ShowOrder.HotNum):
-                        DisplayResults(searchedTeacherList.OrderByDescending(t => t.CommentNum + t.VoteNum).ToList(), searchedCourseList.OrderByDescending(c => c.TotalSampleSize).ToList());
-                        break;
-                    case (Config.ShowOrder.CallNameRate):
-                        DisplayResults(searchedTeacherList.OrderBy(t => t.CallNameRate).ToList(), searchedCourseList);
-                        break;
-                    case (Config.ShowOrder.None):
-                        DisplayResults(searchedTeacherList, searchedCourseList);
-                        break;
-                }
+                var searchedTeacherList = search.SearchTeacherName(keyword, Config.MaxResultPerPage, Config.HideUnrated, Config.showOrder);
+                var searchedCourseList = search.SearchCourseName(keyword, Config.MaxResultPerPage, Config.HideUnrated, Config.showOrder);
+
+                DisplayResults(searchedTeacherList, searchedCourseList);
             }
 
         }
@@ -94,7 +78,6 @@ namespace WebCrawler_WinForm_
             var step = 45;
 
             hasDisplayed = true;
-            //this.Size = new Size(760,530);
             groupBox1.Controls.Clear();
             groupBox2.Controls.Clear();
             groupBox1.Size = new Size(640, 100);
@@ -132,7 +115,7 @@ namespace WebCrawler_WinForm_
                     Font = new Font("微软雅黑", 11, FontStyle.Underline),
                     Location = new Point(xStart + 350, yStart - 50),
                     AutoSize = true,
-                    TextAlign = ContentAlignment.MiddleCenter
+                    TextAlign = ContentAlignment.MiddleCenter,
                 };
                 callNameRateLabel1.Click += (s, arg) =>
                 {
@@ -327,7 +310,7 @@ namespace WebCrawler_WinForm_
                 }
                 groupBox1.Controls.Add(hotLabel);
                 i++;
-                if (i >= maxItemsPerPage) break;
+                if (i >= Config.MaxResultPerPage) break;
             }
 
             groupBox2.Location = new Point(50, 240 + i * step);
@@ -536,7 +519,7 @@ namespace WebCrawler_WinForm_
                         nameLabel.Text = nameLabel.Text.Substring(0, 15);
                         j++;
                     }
-                    if (j >= maxItemsPerPage) break;
+                    if (j >= Config.MaxResultPerPage) break;
                 }
             }
             var emptyLabel = new Label()
@@ -550,7 +533,7 @@ namespace WebCrawler_WinForm_
 
         private void checkBox1_CheckedChanged(object sender, EventArgs e)
         {
-            showUnrated = checkBox1.Checked ? false : true;
+            Config.HideUnrated = checkBox1.Checked;
             if (hasDisplayed)
             {
                 button1.PerformClick();

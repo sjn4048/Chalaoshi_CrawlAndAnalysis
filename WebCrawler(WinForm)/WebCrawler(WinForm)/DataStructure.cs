@@ -75,7 +75,7 @@ namespace WebCrawler_WinForm_
                 case ("CallNameRate"):
                     if (HasEnoughData)
                     {
-                        string callNameRate_string = (CallNameRate * 100).ToString() + "%";
+                        string callNameRate_string = $"{CallNameRate * 100:N1}%";
                         return callNameRate_string;
                     }
                     else
@@ -105,6 +105,15 @@ namespace WebCrawler_WinForm_
     {
         public string Name;
         public int TeacherCount = 0;
+        public enum FacultyType
+        {
+            Engineer,
+            Science,
+            Humanity,
+            Else,
+        };
+        public FacultyType facultyType;//
+
         public List<TeacherData> TeacherList = new List<TeacherData>();
 
         public static List<FacultyData> FacultyList = new List<FacultyData>();
@@ -228,28 +237,59 @@ namespace WebCrawler_WinForm_
 
     public class SearchAlgorithm
     {
-        public List<TeacherData> SearchTeacherName(string keyword, int maxResults, bool showUnrated)
+        public List<TeacherData> SearchTeacherName(string keyword, int maxResults, bool hideUnrated, Config.ShowOrder showOrder = Config.ShowOrder.None)
         {
-            if (showUnrated)
+            IEnumerable<TeacherData> teacherList;
+            if (!hideUnrated)
             {
-                return TeacherData.totalTeacherList.Where(t => t.Name.ToUpper().Contains(keyword.ToUpper())).Take(maxResults).ToList();
+                teacherList =  TeacherData.totalTeacherList.Where(t => t.Name.ToUpper().Contains(keyword.ToUpper()));
             }
             else
             {
-                return TeacherData.totalTeacherList.Where(t => t.HasEnoughData).Where(t => t.Name.ToUpper().Contains(keyword.ToUpper())).Take(maxResults).ToList();
+                teacherList = TeacherData.totalTeacherList.Where(t => t.HasEnoughData).Where(t => t.Name.ToUpper().Contains(keyword.ToUpper()));
             }
+            switch (Config.showOrder)
+            {
+                case (Config.ShowOrder.Score):
+                    teacherList = teacherList.OrderByDescending(t => t.Score);
+                    break;
+                case (Config.ShowOrder.HotNum):
+                    teacherList = teacherList.OrderByDescending(t => t.CommentNum + t.VoteNum);
+                    break;
+                case (Config.ShowOrder.CallNameRate):
+                    teacherList = teacherList.OrderBy(t => t.CallNameState);
+                    break;
+                case (Config.ShowOrder.None):
+                    break;
+            }
+            return teacherList.ToList();
         }
 
-        public List<CourseData> SearchCourseName(string keyword, int maxResults, bool showUnrated)
+        public List<CourseData> SearchCourseName(string keyword, int maxResults, bool hideUnrated, Config.ShowOrder showOrder = Config.ShowOrder.None)
         {
-            if (showUnrated)
+            IEnumerable<CourseData> courseList;
+            if (!hideUnrated)
             {
-                return CourseData.courseDataList.Where(c => c.Name.ToUpper().Contains(keyword.ToUpper())).Take(maxResults).ToList();
+                courseList = CourseData.courseDataList.Where(c => c.Name.ToUpper().Contains(keyword.ToUpper()));
             }
             else
             {
-                return CourseData.courseDataList.Where(c => c.HasEnoughData).Where(c => c.Name.ToUpper().Contains(keyword.ToUpper())).Take(maxResults).ToList();
+                courseList = CourseData.courseDataList.Where(c => c.HasEnoughData).Where(c => c.Name.ToUpper().Contains(keyword.ToUpper()));
             }
+            switch (Config.showOrder)
+            {
+                case (Config.ShowOrder.Score):
+                    courseList = courseList.OrderByDescending(c => c.OverallGPAOfThisCourse);
+                    break;
+                case (Config.ShowOrder.HotNum):
+                    courseList = courseList.OrderByDescending(c => c.TotalSampleSize);
+                    break;
+                case (Config.ShowOrder.None):
+                    break;
+                default:
+                    break;
+            }
+            return courseList.ToList();
         }
     }
 }

@@ -122,21 +122,34 @@ namespace WebCrawler_WinForm_
 
             var scoreTextbox = new TextBox()
             {
-                Text = "请输入分数",
+                Text = "0",
                 Font = new Font("微软雅黑", 11, FontStyle.Regular),
                 Location = new Point(140, 120),
                 AutoSize = true,
+                TabIndex = 0,
             };
             teacherPanel.Controls.Add(scoreTextbox);
 
-            var gpaLabel = new Label()
+            var callNameLabel = new Label()
             {
-                Text = "绩点高于：",
+                Text = "点名情况：",
                 Font = new Font("微软雅黑", 11, FontStyle.Regular),
-                Location = new Point(30, 120),
+                Location = new Point(30, 160),
                 AutoSize = true,
                 TextAlign = ContentAlignment.MiddleCenter
             };
+            teacherPanel.Controls.Add(callNameLabel);
+
+            var callNameComboBox = new ComboBox()
+            {
+                Font = new Font("微软雅黑", 11, FontStyle.Regular),
+                Location = new Point(140, 160),
+                AutoSize = true,
+                Items = { "不限", "不点名", "点名" },
+                SelectedIndex = 0,
+                TabIndex = 1,
+            };
+            teacherPanel.Controls.Add(callNameComboBox);
         }
 
         private void DrawCoursePanel()

@@ -37,7 +37,7 @@ namespace WebCrawler_WinForm_
 
         private void button2_Click_1(object sender, EventArgs e)
         {
-            MessageBox.Show("说明文档正在制作中，将在下个版本上线", "Oops...");
+            MessageBox.Show("说明文档正在制作中，将在下个版本上线，相信你的聪明才智可以探索出这个程序的功能的~", "Oops...");
         }
 
         private void button1_MouseEnter(object sender, EventArgs e)

@@ -36,7 +36,7 @@ namespace WebCrawler_Console_
 
     static class Chalaoshi
     {
-        public static int MaximumTeacherPage = 10;
+        public static int MaximumTeacherPage = 1;
         public static Regex TeacherDataRegex = new Regex("^https://chalaoshi.cn/teacher/\\d+/");
         public struct CourseAndGPA
         {
@@ -245,18 +245,19 @@ namespace WebCrawler_Console_
                 i++;
             }
 
-            /*
-             * 这块是读取评论。不知道为什么Xpath找不到。我一定能做出来的。
-
             i = 1;
             while (true)
             {
                 try//*[@id="comment-page"]/div/div[1]/p
                 {
-                    var CommentXpath = $"/html/body/div[3]/div[3]/div[2]/div[{i}]/div/p";
+                    var CommentXpath = $"/html/body/div[3]/div[3]/div[2]/div[1]/div/div[1]/p";
                     var VoteXpath = $"/html/body/div[3]/div[3]/div[2]/div[{i}]/div[1]/div[1]/p";
-                    var comment = Agility.SelectSingleNode(CommentXpath).InnerHtml.ToString();
-                    var voteNum = Agility.SelectSingleNode(VoteXpath).InnerHtml.ToString();
+                    var CommentSelector = $"#comment-page > div > div.left > p";
+
+
+                    //var voteNum = Agility.SelectSingleNode(VoteXpath).InnerHtml.ToString();
+                    var selector = crawledPage.CsQueryDocument.Select(CommentSelector).FirstElement().FirstChild.ToString();
+
                     //var commentx = crawledPage.CsQueryDocument.Select(selector).FirstElement().FirstChild.ToString();
                     i++;
                 }
@@ -266,7 +267,6 @@ namespace WebCrawler_Console_
                 }
             }
 
-            */
 
             #endregion
             var Info = $"{Name},{ID},{Uri},{Faculty},{Score},{CallNameRate},{VoteNumber},{CommentNumber}";

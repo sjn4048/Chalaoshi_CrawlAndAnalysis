@@ -93,9 +93,7 @@ namespace WebCrawler_WinForm_
                 }
             }
             else
-            {
                 WriteIntoCSV();//写入csv
-            }
 
             stopwatch.Stop();
             try
@@ -108,6 +106,7 @@ namespace WebCrawler_WinForm_
                     crawlPage.UpdateProcessList.Items.Add($"页面平均耗时:{stopwatch.ElapsedMilliseconds / TotalInfo.Count}毫秒.");
                     crawlPage.UpdateProcessList.TopIndex = crawlPage.UpdateProcessList.Items.Count - 1;
                     crawlPage.progressBar1.Value = crawlPage.progressBar1.Maximum;
+                    crawlPage.taskDialogProgressBar.Value = crawlPage.taskDialogProgressBar.Maximum;
                 }
             }
             catch
@@ -266,6 +265,7 @@ namespace WebCrawler_WinForm_
                     if (crawlPage.progressBar1.Value < crawlPage.progressBar1.Maximum)
                     {
                         crawlPage.progressBar1.Value += crawlPage.progressBar1.Step;
+                        crawlPage.taskDialogProgressBar.Value += 1;
                     }
                     if (crawlPage.checkBox1.Checked == true)
                     {

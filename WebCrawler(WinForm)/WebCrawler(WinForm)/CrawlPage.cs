@@ -9,8 +9,8 @@ using System.Text;
 using System.Diagnostics;
 using System.Configuration;
 using System.Net;
-
-
+using Microsoft.WindowsAPICodePack.Dialogs;
+using Microsoft.WindowsAPICodePack.Shell;
 
 namespace WebCrawler_WinForm_
 {
@@ -19,6 +19,7 @@ namespace WebCrawler_WinForm_
         public static bool isCrawlerRunning = false;
         Task task;
         CancellationTokenSource tokenSource = new CancellationTokenSource();
+        public TaskDialogProgressBar taskDialogProgressBar;
 
         public CrawlPage()
         {
@@ -68,6 +69,7 @@ namespace WebCrawler_WinForm_
             FinishButton.Enabled = false;
             checkBox1.Checked = checkBox2.Checked = true;
             progressBar1.Maximum = Chalaoshi.MaximumTeacherPage;
+            taskDialogProgressBar = new TaskDialogProgressBar(0, Chalaoshi.MaximumTeacherPage, 0);
         }
 
         private void FinishButton_Click(object sender, EventArgs e)

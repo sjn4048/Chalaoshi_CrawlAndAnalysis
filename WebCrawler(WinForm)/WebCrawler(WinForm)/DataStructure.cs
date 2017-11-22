@@ -4,7 +4,6 @@ using System.Configuration;
 using System.Linq;
 using System.Text;
 using System.Data;
-using System.Data.SqlClient;
 using System.IO;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
@@ -141,6 +140,9 @@ namespace WebCrawler_WinForm_
     {
         public void GetTeacherDataFromCsv(FileStream file)
         {
+            TeacherData.totalTeacherList.Clear(); //读取前先清空当前已读取的内容
+            CourseData.courseDataList.Clear();
+            FacultyData.FacultyList.Clear();
             StreamReader streamReader = new StreamReader(file, Encoding.Default);
             string teacherLine = string.Empty;
             while ((teacherLine = streamReader.ReadLine()) != null)

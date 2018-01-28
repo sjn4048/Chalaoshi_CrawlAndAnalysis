@@ -4,7 +4,6 @@ using System.Threading.Tasks;
 using System.IO;
 using System.Text.RegularExpressions;
 using System.Threading;
-using System.Net.NetworkInformation;
 using System.Text;
 using System.Diagnostics;
 using System.Configuration;
@@ -29,23 +28,7 @@ namespace WebCrawler_WinForm_
 
         private void button1_Click(object sender, EventArgs e)
         {
-            try
-            {
-                Ping objPingSender = new Ping();
-                PingOptions objPinOptions = new PingOptions();
-                objPinOptions.DontFragment = true;
-                string data = "";
-                byte[] buffer = Encoding.UTF8.GetBytes(data);
-                int intTimeout = 120;
-                PingReply objPinReply = objPingSender.Send("baidu.com", intTimeout, buffer, objPinOptions);
-                string strInfo = objPinReply.Status.ToString();
-                if (strInfo != "Success")
-                {
-                    MessageBox.Show("抱歉，检测到您的网络未连接或不稳定，请稍后再试", "更新失败");
-                    return;
-                }
-            }
-            catch
+            if (!ToolFunctions.CheckNetworkStatus())
             {
                 MessageBox.Show("抱歉，检测到您的网络未连接或不稳定，请稍后再试", "更新失败");
                 return;

@@ -104,6 +104,7 @@
     <Compile Include="AboutForm.Designer.cs">
       <DependentUpon>AboutForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="AutoUpdate.cs" />
     <Compile Include="BillboardForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -173,6 +174,7 @@
     <Compile Include="TeacherDataForm.Designer.cs">
       <DependentUpon>TeacherDataForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="ToolFunctions.cs" />
     <Compile Include="UpdateFailedDueToTime.cs">
       <SubType>Form</SubType>
     </Compile>

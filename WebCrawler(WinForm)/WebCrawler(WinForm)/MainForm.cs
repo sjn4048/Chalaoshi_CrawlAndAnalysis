@@ -21,8 +21,15 @@ namespace WebCrawler_WinForm_
         public MainForm()
         {
             InitializeComponent();
-            StartLoadingTask();
             Control.CheckForIllegalCrossThreadCalls = false;
+            StartLoadingTask();
+            if (File.Exists("downloading_tmp.csv"))
+            {
+                if (File.Exists("CLSDatabase.csv"))
+                    File.Delete("CLSDatabase.csv");
+                File.Move("downloading_tmp.csv", "CLSDatabase.csv");
+            }
+            Config.ReadConfig();
         }
 
         private void 帮助HToolStripMenuItem_Click(object sender, EventArgs e)
@@ -49,7 +56,7 @@ namespace WebCrawler_WinForm_
 
         private void MainForm_Load(object sender, EventArgs e)
         {
-            Config.ReadConfig();
+
         }
 
         private void UpdateLabel_Click(object sender, EventArgs e)
@@ -158,6 +165,10 @@ namespace WebCrawler_WinForm_
                 }
             });
             task.Start();
+            new Task(() =>
+            {
+                new AutoUpdate().UpdateDatabase();
+            }).Start();
         }
 
         private void label2_Click(object sender, EventArgs e)
@@ -184,6 +195,11 @@ namespace WebCrawler_WinForm_
                     e.Cancel = true;
                 }
             }
+        }
+
+        private void MainForm_FormClosed(object sender, FormClosedEventArgs e)
+        {
+
         }
     }
 }

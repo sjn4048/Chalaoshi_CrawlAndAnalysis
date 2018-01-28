@@ -52,7 +52,7 @@ namespace WebCrawler_WinForm_
         public void ShowConfig()
         {
             resultTextBox.Text = Config.MaxResultPerPage.ToString();
-            orderComboBox.SelectedIndex = (int)Enum.Parse(typeof(Config.ShowOrder), Config.showOrder.ToString());
+            orderComboBox.SelectedIndex = (int)Enum.Parse(typeof(Config.ShowOrder), Config.Order.ToString());
             hideCheckBox.Checked = Config.HideUnrated;
         }
     }
@@ -61,6 +61,7 @@ namespace WebCrawler_WinForm_
     {
         public static int MaxResultPerPage;
         public static bool HideUnrated;
+        public static int DatabaseVersion;
 
         public enum ShowOrder
         {
@@ -69,7 +70,7 @@ namespace WebCrawler_WinForm_
             HotNum,
             CallNameRate,
         };
-        public static ShowOrder showOrder;
+        public static ShowOrder Order;
 
         public static void ReadConfig()//读取配置数据，如果没有的话新建配置并使用默认
         {
@@ -83,7 +84,8 @@ namespace WebCrawler_WinForm_
 
                         MaxResultPerPage = int.Parse(configPart[0]);
                         HideUnrated = bool.Parse(configPart[1]);
-                        showOrder = (ShowOrder)Enum.Parse(typeof(ShowOrder), configPart[2]);
+                        Order = (ShowOrder)Enum.Parse(typeof(ShowOrder), configPart[2]);
+                        DatabaseVersion = int.Parse(configPart[3]);
                     }
                 }
                 else
@@ -106,7 +108,7 @@ namespace WebCrawler_WinForm_
             }
             using (var configSr = new StreamWriter(new FileStream("Config.ini", FileMode.Create, FileAccess.ReadWrite)))
             {
-                string configString = $"{MaxResultPerPage},{HideUnrated},{ShowOrder}";
+                string configString = $"{MaxResultPerPage},{HideUnrated},{ShowOrder},{Config.DatabaseVersion}";
                 configSr.Write(configString);
             }
             ReadConfig();
@@ -114,13 +116,15 @@ namespace WebCrawler_WinForm_
 
         public static void SetInitialConfig()
         {
-            FileStream configFile = new FileStream("Config.ini", FileMode.Create, FileAccess.ReadWrite);
-            StreamWriter configSr = new StreamWriter(configFile);
-            string configString = $"30,False,None";
-            configSr.Write(configString);
-            configSr.Close();
-            configFile.Close();
-            ReadConfig();
+            using (FileStream configFile = new FileStream("Config.ini", FileMode.Create, FileAccess.ReadWrite))
+            {
+                using (StreamWriter configSr = new StreamWriter(configFile))
+                {
+                    string configString = $"30,False,None";
+                    configSr.Write(configString);
+                    ReadConfig();
+                }
+            }
         }
     }
 }

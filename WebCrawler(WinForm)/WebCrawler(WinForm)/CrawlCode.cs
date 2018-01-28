@@ -46,6 +46,8 @@ namespace WebCrawler_WinForm_
             }
             LeftIDList.Remove(2485);//这两个网址(ID)有问题
             LeftIDList.Remove(3433);
+            LeftIDList.Remove(4081);
+            LeftIDList.Remove(4796);
 
             #region
 
@@ -118,9 +120,10 @@ namespace WebCrawler_WinForm_
             }
             crawlPage.FinishButton.Enabled = true;
             crawlPage.button2.Enabled = false;
-            FileStream file = new FileStream("CLSDatabase.csv", FileMode.Open, FileAccess.Read);
-            var getData = new GetData();
-            getData.GetTeacherDataFromCsv(file);
+            using (var file = new FileStream("CLSDatabase.csv", FileMode.Open, FileAccess.Read))
+            {
+                new GetData().GetTeacherDataFromCsv(file);
+            }
         }
 
         void crawler_ProcessPageCrawlStarting(object sender, PageCrawlStartingArgs e)
@@ -308,18 +311,20 @@ namespace WebCrawler_WinForm_
         void WriteIntoCSV()
         {
             var fileName = $"CLSDatabase.csv";
-            FileStream file = new FileStream(fileName, FileMode.Create, FileAccess.ReadWrite);
-            StreamWriter streamWriter = new StreamWriter(file, Encoding.Default); // 创建写入流
-            for (int i = 0; i < TotalInfo.Count; i++)
+            using (FileStream file = new FileStream(fileName, FileMode.Create, FileAccess.ReadWrite))
             {
-                streamWriter.WriteLine(TotalInfo[i]);
+                using (StreamWriter streamWriter = new StreamWriter(file, Encoding.Default)) // 创建写入流
+                {
+                    for (int i = 0; i < TotalInfo.Count; i++)
+                    {
+                        streamWriter.WriteLine(TotalInfo[i]);
+                    }
+                    if (crawlPage.checkBox1.Checked == true)
+                    {
+                        crawlPage.UpdateProcessList.Items.Add("数据库已成功更新");
+                    }
+                }
             }
-            if (crawlPage.checkBox1.Checked == true)
-            {
-                crawlPage.UpdateProcessList.Items.Add("数据库已成功更新");
-            }
-            streamWriter.Close();
-            file.Close();
         }
     }
 }

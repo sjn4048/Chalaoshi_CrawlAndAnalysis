@@ -55,8 +55,8 @@ namespace WebCrawler_WinForm_
             else
             {
                 var search = new SearchAlgorithm();
-                var searchedTeacherList = search.SearchTeacherName(keyword, Config.MaxResultPerPage, Config.HideUnrated, Config.showOrder);
-                var searchedCourseList = search.SearchCourseName(keyword, Config.MaxResultPerPage, Config.HideUnrated, Config.showOrder);
+                var searchedTeacherList = search.SearchTeacherName(keyword, Config.MaxResultPerPage, Config.HideUnrated, Config.Order);
+                var searchedCourseList = search.SearchCourseName(keyword, Config.MaxResultPerPage, Config.HideUnrated, Config.Order);
 
                 DisplayResults(searchedTeacherList, searchedCourseList);
             }

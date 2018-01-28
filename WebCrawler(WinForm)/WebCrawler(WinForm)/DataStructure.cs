@@ -15,7 +15,7 @@ namespace WebCrawler_WinForm_
 {
     public static class Chalaoshi
     {
-        public const int MaximumTeacherPage = 3743;
+        public const int MaximumTeacherPage = 5215;
         public static Regex TeacherDataRegex = new Regex("^https://chalaoshi.cn/teacher/\\d+/");
     }
 
@@ -143,96 +143,98 @@ namespace WebCrawler_WinForm_
             TeacherData.totalTeacherList.Clear(); //读取前先清空当前已读取的内容
             CourseData.courseDataList.Clear();
             FacultyData.FacultyList.Clear();
-            StreamReader streamReader = new StreamReader(file, Encoding.Default);
-            string teacherLine = string.Empty;
-            while ((teacherLine = streamReader.ReadLine()) != null)
+            using (StreamReader streamReader = new StreamReader(file, Encoding.Default))
             {
-                var Line = teacherLine.Split(',');
-                TeacherData thisTeacher = new TeacherData()
+                string teacherLine = string.Empty;
+                while ((teacherLine = streamReader.ReadLine()) != null)
                 {
-                    Name = Line[0],
-                    ID = int.Parse(Line[1]),
-                    Url = Line[2],
-                };
-                thisTeacher.Faculty = FacultyData.GetFaculty(thisTeacher, Line[3]);
-                thisTeacher.Score = (Line[4] == "N/A") ? 0 : double.Parse(Line[4]);
-                thisTeacher.CallNameRate = double.Parse(Line[5].Replace("%", "")) / 100.0;
-                thisTeacher.VoteNum = (Line[6] == "<5") ? 0 : int.Parse(Line[6]);
-                thisTeacher.CommentNum = (Line[7] == "<5") ? 0 : int.Parse(Line[7]);
-
-                if (thisTeacher.VoteNum < 5)
-                {
-                    thisTeacher.HasEnoughData = false;
-                    thisTeacher.CallNameState = TeacherData.CallName_enum.Unknown;
-                }
-                else if (thisTeacher.CallNameRate > 0.5)
-                    thisTeacher.CallNameState = TeacherData.CallName_enum.Yes;
-                else if (thisTeacher.CallNameRate > 0.2)
-                    thisTeacher.CallNameState = TeacherData.CallName_enum.Possible;
-                else
-                    thisTeacher.CallNameState = TeacherData.CallName_enum.No;
-
-                var hisCourseList = new List<CourseData>();
-                double overallGPA_number;
-                for (int i = 8; i < Line.Length - 2; i++)
-                {
-                    string courseName;
-                    if ((courseName = Line[i]) == string.Empty)
+                    var Line = teacherLine.Split(',');
+                    TeacherData thisTeacher = new TeacherData()
                     {
-                        break;
+                        Name = Line[0],
+                        ID = int.Parse(Line[1]),
+                        Url = Line[2],
+                    };
+                    thisTeacher.Faculty = FacultyData.GetFaculty(thisTeacher, Line[3]);
+                    thisTeacher.Score = (Line[4] == "N/A") ? 0 : double.Parse(Line[4]);
+                    thisTeacher.CallNameRate = double.Parse(Line[5].Replace("%", "")) / 100.0;
+                    thisTeacher.VoteNum = (Line[6] == "<5") ? 0 : int.Parse(Line[6]);
+                    thisTeacher.CommentNum = (Line[7] == "<5") ? 0 : int.Parse(Line[7]);
+
+                    if (thisTeacher.VoteNum < 5)
+                    {
+                        thisTeacher.HasEnoughData = false;
+                        thisTeacher.CallNameState = TeacherData.CallName_enum.Unknown;
                     }
-                    while (true)
+                    else if (thisTeacher.CallNameRate > 0.5)
+                        thisTeacher.CallNameState = TeacherData.CallName_enum.Yes;
+                    else if (thisTeacher.CallNameRate > 0.2)
+                        thisTeacher.CallNameState = TeacherData.CallName_enum.Possible;
+                    else
+                        thisTeacher.CallNameState = TeacherData.CallName_enum.No;
+
+                    var hisCourseList = new List<CourseData>();
+                    double overallGPA_number;
+                    for (int i = 8; i < Line.Length - 2; i++)
                     {
-                        i++;
-                        try
+                        string courseName;
+                        if ((courseName = Line[i]) == string.Empty)
                         {
-                            overallGPA_number = double.Parse(Line[i]);
                             break;
                         }
-                        catch
+                        while (true)
                         {
-                            courseName += $",{Line[i]}";
+                            i++;
+                            try
+                            {
+                                overallGPA_number = double.Parse(Line[i]);
+                                break;
+                            }
+                            catch
+                            {
+                                courseName += $",{Line[i]}";
+                            }
                         }
-                    }
-                    i++;
-                    string overallGPASize_string = Line[i];
-                    int overallGPASize_int = int.Parse(overallGPASize_string.Replace("+", ""));
-                    var thisCourseData = new CourseData()
-                    {
-                        Name = courseName,
-                        GPASampleSizeOfTeacher_string = overallGPASize_string,
-                        GPASampleSizeOfTeacher_int = overallGPASize_int,
-                        OverallGPAOfTeacher = overallGPA_number
-                    };
-                    hisCourseList.Add(thisCourseData);
-                    var query = from c in CourseData.courseDataList//需要debug
-                                where c.Name == courseName
-                                select c;
-
-                    if (!query.Any())
-                    {
-                        var courseData = new CourseData();
-                        courseData.Name = courseName;
-                        courseData.CourseTeachers = new List<TeacherData>();
-                        courseData.CourseTeachers.Add(thisTeacher);
-                        courseData.TotalGPA += overallGPA_number * overallGPASize_int;
-                        courseData.TotalSampleSize += overallGPASize_int;
-                        courseData.OverallGPAOfThisCourse = courseData.TotalGPA / courseData.TotalSampleSize;
-                        CourseData.courseDataList.Add(courseData);
-                    }
-                    else
-                    {
-                        foreach (var courseData in CourseData.courseDataList.Select(x => x).Where(x => x.Name == courseName))
+                        i++;
+                        string overallGPASize_string = Line[i];
+                        int overallGPASize_int = int.Parse(overallGPASize_string.Replace("+", ""));
+                        var thisCourseData = new CourseData()
                         {
+                            Name = courseName,
+                            GPASampleSizeOfTeacher_string = overallGPASize_string,
+                            GPASampleSizeOfTeacher_int = overallGPASize_int,
+                            OverallGPAOfTeacher = overallGPA_number
+                        };
+                        hisCourseList.Add(thisCourseData);
+                        var query = from c in CourseData.courseDataList//需要debug
+                                    where c.Name == courseName
+                                    select c;
+
+                        if (!query.Any())
+                        {
+                            var courseData = new CourseData();
+                            courseData.Name = courseName;
+                            courseData.CourseTeachers = new List<TeacherData>();
                             courseData.CourseTeachers.Add(thisTeacher);
                             courseData.TotalGPA += overallGPA_number * overallGPASize_int;
                             courseData.TotalSampleSize += overallGPASize_int;
                             courseData.OverallGPAOfThisCourse = courseData.TotalGPA / courseData.TotalSampleSize;
+                            CourseData.courseDataList.Add(courseData);
+                        }
+                        else
+                        {
+                            foreach (var courseData in CourseData.courseDataList.Select(x => x).Where(x => x.Name == courseName))
+                            {
+                                courseData.CourseTeachers.Add(thisTeacher);
+                                courseData.TotalGPA += overallGPA_number * overallGPASize_int;
+                                courseData.TotalSampleSize += overallGPASize_int;
+                                courseData.OverallGPAOfThisCourse = courseData.TotalGPA / courseData.TotalSampleSize;
+                            }
                         }
                     }
+                    thisTeacher.CourseList = hisCourseList;
+                    TeacherData.totalTeacherList.Add(thisTeacher);
                 }
-                thisTeacher.CourseList = hisCourseList;
-                TeacherData.totalTeacherList.Add(thisTeacher);
             }
         }
     }
@@ -250,7 +252,7 @@ namespace WebCrawler_WinForm_
             {
                 teacherList = TeacherData.totalTeacherList.Where(t => t.HasEnoughData).Where(t => t.Name.ToUpper().Contains(keyword.ToUpper()));
             }
-            switch (Config.showOrder)
+            switch (Config.Order)
             {
                 case (Config.ShowOrder.Score):
                     teacherList = teacherList.OrderByDescending(t => t.Score);
@@ -278,7 +280,7 @@ namespace WebCrawler_WinForm_
             {
                 courseList = CourseData.courseDataList.Where(c => c.HasEnoughData).Where(c => c.Name.ToUpper().Contains(keyword.ToUpper()));
             }
-            switch (Config.showOrder)
+            switch (Config.Order)
             {
                 case (Config.ShowOrder.Score):
                     courseList = courseList.OrderByDescending(c => c.OverallGPAOfThisCourse);

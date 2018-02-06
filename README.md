@@ -8,7 +8,7 @@ Free for any non-conmercial use (if any).
 
 Copyright: ZJU, Faculty of Computer Science, Shi Jianing.
 
-3160105216@zju.edu.cn / 1176827825@qq.com.
+1176827825@qq.com.
 
 *****
 

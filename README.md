@@ -6,7 +6,7 @@ This is a test web crawler program intended for Chalaoshi.cn.
 
 Free for any non-conmercial use (if any).
 
-Copyright: ZJU, Faculty of Computer Science, Shi Jianing.
+Copyright: ZJU, Faculty of Computer Science, sjn.
 
 1176827825@qq.com.
 

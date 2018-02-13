@@ -2,7 +2,7 @@
 
 *****
 
-This is a test web crawler program intended for Chalaoshi.cn.
+This is a web crawler and data analysis program for Chalaoshi.cn.
 
 Free for any non-conmercial use (if any).
 
@@ -12,14 +12,14 @@ Copyright: ZJU, Faculty of Computer Science, sjn.
 
 *****
 
-First stage function:(finished):
+First stage function:(finished in V1.0):
 
 A command line program for http://chalaoshi.cn/
 
-Second stage function:(finished):
+Second stage function:(finished in v2.0):
 
 A Windows application for data in http://chalaoshi.cn with search engine and auto analysis.
 
-Third stage function:(still working on):
+Third stage function:(will be finished in v3.0):
 
-Provide fuzzy search (which is very weak in the latest version); Auto connection to http://jwbinfosys.zju.edu.cn/
+Fuzzy search, download comments, auto comment analysis(this would be very exciting, plz wait for it)

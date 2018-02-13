@@ -119,7 +119,7 @@ namespace WebCrawler_WinForm_
             gpaLabel1.Click += (s, arg) =>
             {
                 groupBox2.Controls.Clear();
-                DisplayResults(teacherList.OrderByDescending(m => m.TemplateCourse.OverallGPAOfTeacher).ToList());
+                DisplayResults(teacherList.OrderByDescending(m => m.TemporaryCourse.OverallGPAOfTeacher).ToList());
             };
             gpaLabel1.MouseEnter += (s, arg) =>
             {
@@ -146,7 +146,7 @@ namespace WebCrawler_WinForm_
                 {
                     if (course.Name == courseData.Name)
                     {
-                        teacher.TemplateCourse =  selectedCourse = course;
+                        teacher.TemporaryCourse =  selectedCourse = course;
                         break;
                     }
                 }

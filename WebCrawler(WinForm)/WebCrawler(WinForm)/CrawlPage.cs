@@ -16,18 +16,20 @@ namespace WebCrawler_WinForm_
     public partial class CrawlPage : Form
     {
         public static bool isCrawlerRunning = false;
-        Task task;
-        CancellationTokenSource tokenSource = new CancellationTokenSource();
+
+        CancellationTokenSource cts = new CancellationTokenSource();
+        CancellationToken ct;
         public TaskDialogProgressBar taskDialogProgressBar;
 
         public CrawlPage()
         {
-            Control.CheckForIllegalCrossThreadCalls = false;//防止线程间操作error
             InitializeComponent();
+            button2.Enabled = false;
         }
 
         private void button1_Click(object sender, EventArgs e)
         {
+            ct = cts.Token;
             if (!ToolFunctions.CheckNetworkStatus())
             {
                 MessageBox.Show("抱歉，检测到您的网络未连接或不稳定，请稍后再试", "更新失败");
@@ -38,8 +40,8 @@ namespace WebCrawler_WinForm_
             {
                 isCrawlerRunning = true;
                 WebCrawlerProcess crawler = new WebCrawlerProcess(this);
-                task = new Task(() => crawler.StartWebCrawler(), tokenSource.Token);
-                task.Start();
+                new Task(() => crawler.StartWebCrawler(ct), ct).Start();
+                button2.Enabled = true;
             }
             else
             {
@@ -73,10 +75,9 @@ namespace WebCrawler_WinForm_
             {
                 if (MessageBox.Show("爬虫正在运行中，停止任务将导致更新失败，是否确认？", "停止任务", MessageBoxButtons.YesNo) == DialogResult.Yes)
                 {
-                    tokenSource.Cancel();
                     isCrawlerRunning = false;
-                    this.Controls.Clear();
                     MessageBox.Show("更新任务被手动停止", "更新失败");
+                    this.progressBar1.Value = 0;
                 }
                 else
                 {
@@ -95,15 +96,12 @@ namespace WebCrawler_WinForm_
             {
                 if(MessageBox.Show("爬虫正在运行中，停止任务将导致更新失败，是否确认？", "停止任务", MessageBoxButtons.YesNo) == DialogResult.Yes)
                 {
-                    tokenSource.Cancel();
+                    cts.Cancel();
                     isCrawlerRunning = false;
-                    this.Close();
                     MessageBox.Show("更新任务被手动停止", "更新失败");
+                    this.Close();//debug
+                    button2.Enabled = false;
                 }
-            }
-            else
-            {
-                this.Close();
             }
         }
     }

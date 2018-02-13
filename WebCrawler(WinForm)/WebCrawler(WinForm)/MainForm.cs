@@ -21,7 +21,6 @@ namespace WebCrawler_WinForm_
         public MainForm()
         {
             InitializeComponent();
-            Control.CheckForIllegalCrossThreadCalls = false;
             StartLoadingTask();
             if (File.Exists("downloading_tmp.csv"))
             {
@@ -94,7 +93,7 @@ namespace WebCrawler_WinForm_
         {
             if (TeacherData.totalTeacherList == null && CourseData.courseDataList == null)
             {
-                MessageBox.Show("数据库可能已丢失或被篡改，请点击“更新数据”重新获取或联系作者","数据库丢失");
+                MessageBox.Show("数据库可能已丢失或被篡改，请点击“更新数据”重新获取或联系作者", "数据库丢失");
                 return;
             }
             if (!isDataFinished && task.Status == TaskStatus.Running)
@@ -121,7 +120,7 @@ namespace WebCrawler_WinForm_
             }
             else
             {
-                var form = new CrawlShouldKnow() {StartPosition = FormStartPosition.CenterScreen, TopMost = true};
+                var form = new CrawlShouldKnow() { StartPosition = FormStartPosition.CenterScreen, TopMost = true };
                 form.Show();
             }
         }
@@ -145,23 +144,33 @@ namespace WebCrawler_WinForm_
 
         private void StartLoadingTask()
         {
+            string message = string.Empty;
+            Action<string> sendMessage;
+            sendMessage = delegate (string msg) { toolStripStatusLabel1.Text = msg; };
             task = new Task(() =>
             {
                 Stopwatch stopwatch = new Stopwatch();
                 stopwatch.Start();
+                //Action<string> actionDelegate = delegate (string msg) { this.toolStripStatusLabel1.Text = msg; };
                 try
                 {
                     FileStream file = new FileStream("CLSDatabase.csv", FileMode.Open, FileAccess.Read);
                     var getData = new GetData();
+                    //Invoke(actionDelegate, "正在载入数据库中...");
                     toolStripStatusLabel1.Text = "正在载入数据库中...";
                     getData.GetTeacherDataFromCsv(file);
                     isDataFinished = true;
                     stopwatch.Stop();
-                    toolStripStatusLabel1.Text = $"数据库载入完成，用时{(stopwatch.ElapsedMilliseconds / 1000.0):F2}秒";
+                    var timeMsg = $"数据库载入完成，用时{(stopwatch.ElapsedMilliseconds / 1000.0):F2}秒";
+                    getData.SaveAllComments();//debug
+                    toolStripStatusLabel1.Text = timeMsg;
+                    //Invoke(actionDelegate, timeMsg);
                 }
-                catch
+                catch (Exception ex)
                 {
-                    toolStripStatusLabel1.Text = "未发现数据库，请点击“更新数据”获取数据库";
+                    var errorMsg = $"未发现数据库，请点击“更新数据”获取数据库;error:{ex}";
+                    //Invoke(actionDelegate, errorMsg);
+                    toolStripStatusLabel1.Text = errorMsg;
                 }
             });
             task.Start();

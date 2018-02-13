@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 using System.Threading;
 using System.Diagnostics;
 using System.Net;
+using Newtonsoft.Json;
 
 namespace WebCrawler_WinForm_
 {
@@ -21,14 +22,19 @@ namespace WebCrawler_WinForm_
 
     public class TeacherData
     {
+        //爬虫直接获取的数据
         public int ID;//统一辨识号
         public string Name;
         public string Url;
         public FacultyData Faculty;
-        public bool HasEnoughData = true;
         public double Score;
         public double CallNameRate;
+        public int VoteNum;
+        public int CommentNum;
+        public List<CourseData> CourseList = new List<CourseData>();
+        public List<CommentData> CommentList = new List<CommentData>();
 
+        //基于自然语言处理算出的数据
         public enum CallName_enum
         {
             No = 0,
@@ -37,13 +43,27 @@ namespace WebCrawler_WinForm_
             Unknown = 3,
         };
         public CallName_enum CallNameState;
-        public int VoteNum;
-        public int CommentNum;
-        public List<CourseData> CourseList = new List<CourseData>();
-        public CourseData TemplateCourse;
+        public struct Statistic
+        {
+            double Point;
+            double Credit;
+        };
+        public Statistic TeachingSkill;  //课讲的好不好
+        public Statistic HomeworkAmount; //作业（事情）多不多
+        public Statistic GiveScore;      //给分好不好
+        public Statistic Characteristic; //性格、处事方式
+        public Statistic OverallEval;    //学生给的总体评价
 
+        public Statistic OverallScore;   //TODO：根据用户输入的偏好进行的个性化打分
+
+        //用于排序、显示、分析的辅助数据（如果有时间的话重构删掉）
+        public CourseData TemporaryCourse;
+        public bool HasEnoughData = true;
+
+        //教师列表
         public static List<TeacherData> totalTeacherList = new List<TeacherData>();
 
+        //重载方法
         public string ToString(string format)
         {
             switch (format)
@@ -85,6 +105,17 @@ namespace WebCrawler_WinForm_
         }//重载的ToString()方法，用于打印数据
     }
 
+    public class CommentData
+    {
+        public string Text;
+        public DateTime Time;
+        public int Vote;
+        ///
+        ///Next Stage
+        ///
+        //public enum Keyword;
+    }
+
     public class CourseData
     {
         public string Name;
@@ -100,6 +131,9 @@ namespace WebCrawler_WinForm_
         public static List<CourseData> courseDataList = new List<CourseData>();
     }
 
+    /// <summary>
+    /// TODO
+    /// </summary>
     public class FacultyData
     {
         public string Name;
@@ -233,9 +267,37 @@ namespace WebCrawler_WinForm_
                         }
                     }
                     thisTeacher.CourseList = hisCourseList;
+                    var commentString = streamReader.ReadLine();
+                    var comments = commentString.Split(',');
+                    var count = comments.Count();
+                    for (int i = 0; i < count - 1; i = i + 3)
+                    {
+                        thisTeacher.CommentList.Add(new CommentData()
+                        {
+                            Text = comments[i].Replace("&NewLine", Environment.NewLine),
+                            Vote = int.Parse(comments[i + 1]),
+                            Time = DateTime.Parse(comments[i + 2])
+                        });
+                    }
                     TeacherData.totalTeacherList.Add(thisTeacher);
                 }
             }
+        }
+
+        public void SaveAllComments(string path = "Comments.txt")
+        {
+            var sw = new StreamWriter(path:path, append:false);
+            foreach (var teacher in TeacherData.totalTeacherList)
+            {
+                if (teacher.CommentList.Count == 0)
+                    continue;
+                sw.WriteLine($"###Name:{teacher.Name}");
+                foreach(var comment in teacher.CommentList)
+                {
+                    sw.WriteLine(comment.Text.Replace(Environment.NewLine, "&NewLine"));
+                }
+            }
+            sw.Close();
         }
     }
 
